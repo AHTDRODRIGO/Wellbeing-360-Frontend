@@ -21,14 +21,39 @@ const Dashboard = () => {
   const API_URL = process.env.REACT_APP_FRONTEND_URL;
 
   const [upcomingBirthdays, setUpcomingBirthdays] = useState([]); // State for birthdays
-  const [salaryData, setSalaryData] = useState({ total: "0", percentageChange: "0.00%" }); // State for salary data
+  const [salaryData, setSalaryData] = useState({
+    total: "0",
+    percentageChange: "0.00%",
+  }); // State for salary data
   const [attendanceHistory, setAttendanceHistory] = useState([]); // New State
+  const [appointments, setAppointments] = useState([]);
 
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:8599/v1/wellbeing360/appointment/get-all-appointments"
+        );
+        const result = await response.json();
+        if (result && Array.isArray(result.appointments)) {
+          setAppointments(result.appointments);
+        } else {
+          console.error("Invalid appointments format", result);
+        }
+      } catch (error) {
+        console.error("Error fetching appointments:", error);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
 
   useEffect(() => {
     const fetchAttendanceHistory = async () => {
       try {
-        const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStatsForLastFiveDays`);
+        const response = await fetch(
+          `https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStatsForLastFiveDays`
+        );
         const result = await response.json();
 
         if (result.success && Array.isArray(result.data)) {
@@ -39,7 +64,10 @@ const Dashboard = () => {
           }));
           setAttendanceHistory(formattedData);
         } else {
-          console.error("Error fetching attendance stats:", result.error || result);
+          console.error(
+            "Error fetching attendance stats:",
+            result.error || result
+          );
         }
       } catch (error) {
         console.error("Error fetching attendance history:", error);
@@ -61,7 +89,9 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchBirthdays = async () => {
       try {
-        const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/employees/get-birthdays`);
+        const response = await fetch(
+          `https://back-81-guards.casknet.dev/v1/hris/employees/get-birthdays`
+        );
         const result = await response.json();
 
         if (Array.isArray(result)) {
@@ -72,7 +102,10 @@ const Dashboard = () => {
           }));
           setUpcomingBirthdays(formattedBirthdays);
         } else {
-          console.error("Error fetching birthdays: Response is not an array", result);
+          console.error(
+            "Error fetching birthdays: Response is not an array",
+            result
+          );
         }
       } catch (error) {
         console.error("Error fetching birthdays:", error);
@@ -88,7 +121,9 @@ const Dashboard = () => {
       try {
         const today = moment().format("YYYY-MM-DD");
 
-        const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStats`);
+        const response = await fetch(
+          `https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStats`
+        );
         const result = await response.json();
 
         if (result.success) {
@@ -105,7 +140,10 @@ const Dashboard = () => {
             inLeave,
           }));
         } else {
-          console.error("Error fetching attendance stats:", result.error || result);
+          console.error(
+            "Error fetching attendance stats:",
+            result.error || result
+          );
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -136,13 +174,18 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchPendingLeaves = async () => {
       try {
-        const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/leave/getleaveapprove1`);
+        const response = await fetch(
+          `https://back-81-guards.casknet.dev/v1/hris/leave/getleaveapprove1`
+        );
         const result = await response.json();
 
         if (Array.isArray(result)) {
           setPendingLeaves(result); // Store fetched pending leave requests
         } else {
-          console.error("Error fetching pending leaves: Response is not an array", result);
+          console.error(
+            "Error fetching pending leaves: Response is not an array",
+            result
+          );
         }
       } catch (error) {
         console.error("Error fetching pending leaves:", error);
@@ -153,43 +196,41 @@ const Dashboard = () => {
   }, [API_URL]);
 
   return (
-    <div className="mx-10 ">
+    <div className="mx-10">
       {/* Dashboard Header */}
-      <div className="flex justify-between items-center ">
+      <div className="flex justify-between items-center">
         <div>
           <p className="text-[30px] font-semibold">
-            Dashboard - Employee Information Management
+            Dashboard - Health Management Overview
           </p>
         </div>
       </div>
 
       <div>
-        <p className="text-[25px] font-bold ml-3">Past Month Salary Overview</p>
+        <p className="text-[25px] font-bold ml-3">Recent Registered Patients</p>
       </div>
 
       <div className="grid grid-rows-2 grid-flow-col gap-4 mt-[-50px]">
-        {/* Salary Details & Graph */}
+        {/* Patient Stats & Chart */}
         <div className="col-span-2 shadow-lg p-3 rounded-lg">
           <div className="grid grid-cols-3 gap-6 items-center">
             <div className="col-span-2">
-              <p className="text-[30px] font-bold">
-                LKR {parseFloat(salaryData.total).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </p>
+              <p className="text-[30px] font-bold">125 Patients</p>
               <p
-                className={`p-2 rounded-lg w-[100px] mt-2 text-center ${parseFloat(salaryData.percentageChange) >= 0
-                  ? "bg-green-100 text-green-600"
-                  : "bg-red-100 text-red-600"
-                  }`}
+                className={`p-2 rounded-lg w-[100px] mt-2 text-center ${
+                  parseFloat(salaryData.percentageChange) >= 0
+                    ? "bg-green-100 text-green-600"
+                    : "bg-red-100 text-red-600"
+                }`}
               >
                 {salaryData.percentageChange}
               </p>
-
               <p className="mt-4 text-lg text-gray-600">
-                Total expenses for employee salary in last month
+                Patient registrations in the last month
               </p>
             </div>
-            
-            {/* Graph Section */}
+
+            {/* Chart Section */}
             <div className="col-span-1 mr-[80px]">
               <SalaryOverview onDataFetched={handleSalaryDataFetched} />
             </div>
@@ -198,16 +239,17 @@ const Dashboard = () => {
 
         <div className="row-span-1 col-span-2">
           <div className="shadow-lg rounded-lg p-3">
-            <p className="text-[18px] font-semibold">Statistics</p>
-
+            <p className="text-[18px] font-semibold">Healthcare Statistics</p>
             <div className="grid grid-cols-3 gap-2">
               <div className="flex gap-3 items-center">
                 <div className="text-4xl rounded-full p-2 bg-purple-100 text-purple-600">
                   <LuUsers2 />
                 </div>
                 <div>
-                  <div className="text-2xl font-semibold">{data.totalWorkforce}</div>
-                  <div className="text-sm text-gray-500">Total Workforce</div>
+                  <div className="text-2xl font-semibold">
+                    {data.totalWorkforce}
+                  </div>
+                  <div className="text-sm text-gray-500">Total Staff</div>
                 </div>
               </div>
 
@@ -216,8 +258,10 @@ const Dashboard = () => {
                   <GrUserExpert />
                 </div>
                 <div>
-                  <div className="text-2xl font-semibold">{data.presentWorkforce}</div>
-                  <div className="text-sm text-gray-500">Present Workforce</div>
+                  <div className="text-2xl font-semibold">
+                    {data.presentWorkforce}
+                  </div>
+                  <div className="text-sm text-gray-500">Doctors Available</div>
                 </div>
               </div>
 
@@ -226,8 +270,10 @@ const Dashboard = () => {
                   <FiUserX />
                 </div>
                 <div>
-                  <div className="text-2xl font-semibold">{data.absentWorkforce}</div>
-                  <div className="text-sm text-gray-500">Absent Workforce</div>
+                  <div className="text-2xl font-semibold">
+                    {data.absentWorkforce}
+                  </div>
+                  <div className="text-sm text-gray-500">Doctors On Leave</div>
                 </div>
               </div>
             </div>
@@ -245,27 +291,40 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-4 mt-[-100px]">
-        {/* Chart - Takes 2 Columns */}
+        {/* Attendance Chart */}
         <div className="shadow-lg p-2 rounded-lg col-span-2">
           <Attendance_Chart attendanceData={attendanceHistory} />
         </div>
 
+        {/* Tabs: Appointments, Retirements, Birthdays */}
         <div className="shadow-lg p-4 rounded-lg bg-white">
           <div className="flex border-b">
             <button
-              className={`px-4 py-2 ${activeTab === "leaves" ? "border-b-2 border-blue-500 font-bold text-blue-500" : "text-gray-500"}`}
+              className={`px-4 py-2 ${
+                activeTab === "leaves"
+                  ? "border-b-2 border-blue-500 font-bold text-blue-500"
+                  : "text-gray-500"
+              }`}
               onClick={() => setActiveTab("leaves")}
             >
-              Leaves
+              Appointments
             </button>
             <button
-              className={`px-4 py-2 ${activeTab === "retirements" ? "border-b-2 border-blue-500 font-bold text-blue-500" : "text-gray-500"}`}
+              className={`px-4 py-2 ${
+                activeTab === "retirements"
+                  ? "border-b-2 border-blue-500 font-bold text-blue-500"
+                  : "text-gray-500"
+              }`}
               onClick={() => setActiveTab("retirements")}
             >
               Retirements
             </button>
             <button
-              className={`px-4 py-2 ${activeTab === "birthdays" ? "border-b-2 border-blue-500 font-bold text-blue-500" : "text-gray-500"}`}
+              className={`px-4 py-2 ${
+                activeTab === "birthdays"
+                  ? "border-b-2 border-blue-500 font-bold text-blue-500"
+                  : "text-gray-500"
+              }`}
               onClick={() => setActiveTab("birthdays")}
             >
               Birthdays
@@ -273,18 +332,75 @@ const Dashboard = () => {
           </div>
 
           <div>
+          {activeTab === "leaves" && (
+  appointments.length > 0 ? (
+    <div className="grid grid-cols-1 gap-3 mt-4">
+      {appointments.map((appointment) => (
+        <div
+          key={appointment.appointment_id}
+          className="border rounded-lg p-3 shadow-sm bg-white hover:shadow-md transition duration-300"
+        >
+          <div className="grid grid-cols-2 gap-2">
+            {/* Left Side */}
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-blue-600">{appointment.employee_name}</p>
+              <p className="text-xs text-gray-600">
+                <span className="font-medium">Doctor:</span> {appointment.doctor_name}
+              </p>
+              <p className="text-xs text-gray-600">
+                <span className="font-medium">Specialization:</span> {appointment.specialization}
+              </p>
+            </div>
+
+            {/* Right Side */}
+            <div className="text-right space-y-1">
+              <span className={`text-xs px-2 py-[2px] rounded-full font-semibold 
+                ${appointment.appointment_status === "confirmed"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-yellow-100 text-yellow-700"
+                }`}
+              >
+                {appointment.appointment_status}
+              </span>
+              <p className="text-xs text-gray-600">
+                <span className="font-medium">Date:</span> {appointment.appointment_date}
+              </p>
+              <p className="text-xs text-gray-600">
+                <span className="font-medium">Time:</span> {appointment.start_time} - {appointment.end_time}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p className="text-sm text-gray-500 ">No upcoming appointments.</p>
+  )
+)}
+
+
             {activeTab === "leaves" && (
               <ul>
                 {pendingLeaves.length > 0 ? (
                   pendingLeaves.map((leave, index) => (
-                    <li key={index} className="flex items-center justify-between border-b py-2">
+                    <li
+                      key={index}
+                      className="flex items-center justify-between border-b py-2"
+                    >
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 flex items-center justify-center rounded-full text-white font-bold bg-blue-300">
-                          {leave.employee_fullname.split(" ").map(n => n[0]).join("")}
+                          {leave.employee_fullname
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold">{leave.employee_fullname}</p>
-                          <p className="text-xs text-gray-500">{leave.employee_no}</p>
+                          <p className="text-sm font-semibold">
+                            {leave.employee_fullname}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {leave.employee_no}
+                          </p>
                         </div>
                       </div>
                       <span className="text-gray-400">
@@ -295,7 +411,9 @@ const Dashboard = () => {
                     </li>
                   ))
                 ) : (
-                  <p className="text-gray-500 text-sm">No pending leave requests.</p>
+                  <p className="text-gray-500 text-sm">
+                    No scheduled appointments.
+                  </p>
                 )}
               </ul>
             )}
@@ -310,31 +428,42 @@ const Dashboard = () => {
                 ))}
               </ul>
             )}
+
             {activeTab === "birthdays" && (
               <ul>
                 {upcomingBirthdays.length > 0 ? (
                   upcomingBirthdays.map((birthday, index) => (
-                    <li key={index} className="flex items-center justify-between border-b py-2">
+                    <li
+                      key={index}
+                      className="flex items-center justify-between border-b py-2"
+                    >
                       <div className="flex items-center gap-3">
-                        {/* Circular Avatar with Initials */}
                         <div className="w-8 h-8 flex items-center justify-center rounded-full text-white font-bold bg-blue-300">
-                          {birthday.name.split(" ").map(n => n[0]).join("")}
+                          {birthday.name
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")}
                         </div>
                         <div>
-                          <p className="text-sm font-semibold">{birthday.name}</p>
-                          <p className="text-xs text-gray-500">{birthday.date}</p>
+                          <p className="text-sm font-semibold">
+                            {birthday.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {birthday.date}
+                          </p>
                         </div>
                       </div>
-                      {/* Placeholder Icon (Optional) */}
                       <span className="text-gray-400">
                         <div className="bg-orange-100 text-orange-500 rounded-full p-1">
-                          <RiErrorWarningLine /> {/* You can replace this with a birthday-related icon */}
+                          <RiErrorWarningLine />
                         </div>
                       </span>
                     </li>
                   ))
                 ) : (
-                  <p className="text-gray-500 text-sm">No upcoming birthdays.</p>
+                  <p className="text-gray-500 text-sm">
+                    No upcoming birthdays.
+                  </p>
                 )}
               </ul>
             )}
