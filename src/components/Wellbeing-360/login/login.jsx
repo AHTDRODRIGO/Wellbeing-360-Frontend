@@ -4,6 +4,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import LoginImg from "../../../assets/right.jpg";
 import Logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const Home = () => {
   const [activeSection, setActiveSection] = useState("home");
@@ -16,27 +17,29 @@ const Home = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch(
-        "https://back-81-guards.casknet.dev/v1/81guards/user/userLogin",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            password,
-          }),
-        }
-      );
-
+      const response = await fetch("https://back-81-guards.casknet.dev/v1/81guards/user/userLogin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+        }),
+      });
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        console.log("Login Success:", data);
-        navigate("/emp-dashboard"); // ✅ Redirect on success
+        // ✅ Save to cookies
+        Cookies.set("user_token", data.user_token);
+        Cookies.set("user_type", data.user_type);
+        Cookies.set("employee_no", data.employee_no || "");
+        Cookies.set("username", data.username);
+  
+        console.log("Login Success, redirecting...");
+        navigate("/emp-dashboard"); // ✅ Redirect
       } else {
-        console.error("Login failed:", data.message || "Invalid credentials");
         alert(data.message || "Invalid username or password");
       }
     } catch (error) {
@@ -44,6 +47,7 @@ const Home = () => {
       alert("Login error. Please try again.");
     }
   };
+  
 
   return (
     <div className="h-screen w-full overflow-hidden bg-white">
@@ -196,7 +200,10 @@ const Home = () => {
                 className="text-gray-800 text-md max-w-xl"
               >
                 <h1 className="text-[64px] font-extrabold text-black leading-none">
-                  About Wellbeing <span className="text-[#3264FA]">360</span>
+                  About
+                </h1>
+                <h1 className="text-[64px] font-extrabold text-black leading-none">
+                  Wellbeing <span className="text-[#3264FA]">360</span>
                 </h1>
                 <p className="tracking-widest text-[#3264FA] font-medium uppercase text-sm">
                   Unified Health Management System for Hemas Pharmaceuticals
@@ -231,8 +238,11 @@ const Home = () => {
                 className="text-gray-800 text-md space-y-4"
               >
                 <h1 className="text-[64px] font-extrabold text-black leading-none">
-                  Contact Wellbeing <span className="text-[#3264FA]">360</span>
-                </h1>{" "}
+                  Contact
+                </h1>
+                <h1 className="text-[64px] font-extrabold text-black leading-none">
+                  Wellbeing <span className="text-[#3264FA]">360</span>
+                </h1>
                 <p>
                   Email:{" "}
                   <a
