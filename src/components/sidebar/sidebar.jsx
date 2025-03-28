@@ -51,7 +51,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
 
   return (
     <div
-      className={`fixed top-0 left-0 h-screen bg-yellow-300 p-5 pt-8 shadow-lg 
+      className={`fixed top-0 left-0 h-screen bg-blue-300 p-5 pt-8 shadow-lg 
         transition-all duration-500 ease-in-out ${
           isOpen ? "w-64" : "w-20"
         } flex flex-col ${isShaking ? "animate-shakeX" : ""}`}

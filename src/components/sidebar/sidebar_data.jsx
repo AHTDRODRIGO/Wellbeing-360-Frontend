@@ -15,12 +15,12 @@ const sidebarData = [
     url: "/emp-dashboard",
   },
 
-  {
-    _id: "1",
-    name: "Employee Management",
-    icon: <MdDashboard />,
-    url: "/emp-management",
-  },
+  // {
+  //   _id: "1",
+  //   name: "Employee Management",
+  //   icon: <MdDashboard />,
+  //   url: "/emp-management",
+  // },
 
   // {
   //   _id: "2",
@@ -185,17 +185,17 @@ const sidebarData = [
      
   //   ],
   // },
-  {
-    _id: "7",
-    name: "Checkpoints Management",
-    icon: <MdDashboard />,
-    url: "/Checkpoint",
-  },{
-    _id: "8",
-    name: "Client Management",
-    icon: <MdDashboard />,
-    url: "/client-management",
-  },
+  // {
+  //   _id: "7",
+  //   name: "Checkpoints Management",
+  //   icon: <MdDashboard />,
+  //   url: "/Checkpoint",
+  // },{
+  //   _id: "8",
+  //   name: "Client Management",
+  //   icon: <MdDashboard />,
+  //   url: "/client-management",
+  // },
 ];
 
 export default sidebarData;

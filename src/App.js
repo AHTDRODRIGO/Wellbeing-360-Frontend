@@ -110,7 +110,7 @@ const AppContent = ({
           />
         )}
         <Routes>
-        <Route path="/emp-details" element={<Emp_details />} />
+        {/* <Route path="/emp-details" element={<Emp_details />} />
         <Route path="/onboard_new" element={<Onboard_new />} />
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
@@ -120,7 +120,7 @@ const AppContent = ({
         <Route path="/check_point_by_client" element={<Check_point_by_client/>} />
         <Route path="/Checkpoint" element={<Checkpoint/>} />
         <Route path="/check_point_by_client_02" element={<Check_point_by_client_02/>} />
-        <Route path="/Checkpoint-history" element={<Checkpoint_history/>} />
+        <Route path="/Checkpoint-history" element={<Checkpoint_history/>} /> */}
         <Route path="/emp-dashboard" element={<Emp_Dashboard />} />
 
           

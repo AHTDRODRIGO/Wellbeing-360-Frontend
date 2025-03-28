@@ -3,18 +3,46 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import LoginImg from "../../../assets/right.jpg";
 import Logo from "../../../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    // handle login logic here
+  const handleLogin = async () => {
+    try {
+      const response = await fetch(
+        "https://back-81-guards.casknet.dev/v1/81guards/user/userLogin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            password,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login Success:", data);
+        navigate("/emp-dashboard"); // ✅ Redirect on success
+      } else {
+        console.error("Login failed:", data.message || "Invalid credentials");
+        alert(data.message || "Invalid username or password");
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      alert("Login error. Please try again.");
+    }
   };
 
   return (
@@ -148,7 +176,8 @@ const Home = () => {
                     </div>
                   </div>
                   <button
-                    type="submit"
+                    type="button"
+                    onClick={handleLogin}
                     className="w-full py-3 bg-[#3264FA] text-white rounded-full font-semibold"
                   >
                     Login
@@ -202,7 +231,7 @@ const Home = () => {
                 className="text-gray-800 text-md space-y-4"
               >
                 <h1 className="text-[64px] font-extrabold text-black leading-none">
-                 Contact Wellbeing <span className="text-[#3264FA]">360</span>
+                  Contact Wellbeing <span className="text-[#3264FA]">360</span>
                 </h1>{" "}
                 <p>
                   Email:{" "}
