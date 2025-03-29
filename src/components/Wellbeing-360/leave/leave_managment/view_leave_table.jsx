@@ -26,7 +26,7 @@ const ViewLeaveTable = () => {
     const fetchLeaveCategories = async () => {
         try {
             const response = await fetch(
-                `https://back-81-guards.casknet.dev/v1/hris/leave/getLeaveCategory`
+                `http://localhost:8599/v1/hris/leave/getLeaveCategory`
             );
             const result = await response.json();
             if (result.success) {
@@ -43,7 +43,7 @@ const ViewLeaveTable = () => {
     const fetchEmploymentTypes = async () => {
         try {
             const response = await fetch(
-                "https://back-81-guards.casknet.dev/v1/hris/employmentType/all"
+                "http://localhost:8599/v1/hris/employmentType/all"
             );
             const result = await response.json();
             if (result.success) {
@@ -174,7 +174,7 @@ const ViewLeaveTable = () => {
                             .map((page) => (
                                 <li
                                     key={page}
-                                    className={`px-3 py-1 border rounded cursor-pointer ${currentPage === page + 1 ? "bg-yellow-300 text-black" : "bg-gray-100 text-black"
+                                    className={`px-3 py-1 border rounded cursor-pointer ${currentPage === page + 1 ? "bg-blue-300 text-black" : "bg-gray-100 text-black"
                                         }`}
                                     onClick={() => handlePageChange(page + 1)}
                                 >

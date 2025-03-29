@@ -26,7 +26,7 @@ const User_account_creation_table = () => {
 
   const fetchUserData = async () => {
     try {
-      const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/user/getAllUsers`);
+      const response = await fetch(`http://localhost:8599/v1/hris/user/getAllUsers`);
       if (response.ok) {
         const data = await response.json();
         setUserData(data);
@@ -82,7 +82,7 @@ const User_account_creation_table = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/user/deleteUser?id=${userToDelete.id}`,
+        `http://localhost:8599/v1/hris/user/deleteUser?id=${userToDelete.id}`,
         {
           method: "DELETE",
         }
@@ -128,7 +128,7 @@ const User_account_creation_table = () => {
           onClick={() => handlePageChange(1)}
           className={`mx-1 px-3 py-1 rounded-md ${
             currentPage === 1
-              ? "bg-yellow-300 text-black"
+              ? "bg-blue-300 text-black"
               : "bg-gray-200 text-gray-700"
           }`}
         >
@@ -151,7 +151,7 @@ const User_account_creation_table = () => {
           onClick={() => handlePageChange(i)}
           className={`mx-1 px-3 py-1 rounded-md ${
             currentPage === i
-              ? "bg-yellow-300 text-black"
+              ? "bg-blue-300 text-black"
               : "bg-gray-200 text-gray-700"
           }`}
         >
@@ -174,7 +174,7 @@ const User_account_creation_table = () => {
           onClick={() => handlePageChange(totalPages)}
           className={`mx-1 px-3 py-1 rounded-md ${
             currentPage === totalPages
-              ? "bg-yellow-300 text-black"
+              ? "bg-blue-300 text-black"
               : "bg-gray-200 text-gray-700"
           }`}
         >
@@ -189,7 +189,7 @@ const User_account_creation_table = () => {
   return (
     <div className="p-4">
       <div className="mt-5 mb-5">
-        <div className="px-5 py-2 bg-yellow-300 text-black rounded-md shadow-sm w-60 hover:bg-blue-600">
+        <div className="px-5 py-2 bg-blue-300 text-black rounded-md shadow-sm w-60 hover:bg-blue-600">
           <div
             className="flex items-center justify-between"
             onClick={handleOpenModal}

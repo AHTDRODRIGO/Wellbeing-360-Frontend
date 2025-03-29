@@ -12,7 +12,7 @@ const LeaveHistory = () => {
         // Fetching the data from the API
         const fetchLeaveHistory = async () => {
             try {
-                const response = await fetch('https://back-81-guards.casknet.dev/v1/hris/leave/getleave');
+                const response = await fetch('http://localhost:8599/v1/hris/leave/getleave');
                 const data = await response.json();
 
                 if (data.success) {
@@ -115,7 +115,7 @@ const LeaveHistory = () => {
                         <button
                             key={index + 1}
                             onClick={() => paginate(index + 1)}
-                            className={`px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-yellow-300 text-black' : 'bg-gray-200 text-gray-800'}`}
+                            className={`px-4 py-2 rounded ${currentPage === index + 1 ? 'bg-blue-300 text-black' : 'bg-gray-200 text-gray-800'}`}
                         >
                             {index + 1}
                         </button>

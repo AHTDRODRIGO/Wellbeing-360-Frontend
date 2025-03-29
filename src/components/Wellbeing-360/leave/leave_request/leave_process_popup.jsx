@@ -13,7 +13,7 @@ const Leave_process_popup = ({ togglePopup, employeeNo }) => {
     const fetchLeaveCounts = async () => {
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/leave/getLeaveCounts?employee_no=${employeeNo}`
+          `http://localhost:8599/v1/hris/leave/getLeaveCounts?employee_no=${employeeNo}`
         );
         const data = await response.json();
         setLeaveCounts(data);

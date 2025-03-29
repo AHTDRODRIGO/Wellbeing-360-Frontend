@@ -9,7 +9,7 @@ const ServiceChargeComponentManagement = () => {
 
   const API_URL =
     process.env.REACT_APP_FRONTEND_URL ||
-    "https://back-81-guards.casknet.dev"; // Fallback URL if not provided
+    "http://localhost:8599"; // Fallback URL if not provided
 
   // Fetch Service Charge Data
   const fetchServiceChargeData = async () => {
@@ -17,7 +17,7 @@ const ServiceChargeComponentManagement = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/serviceCharge/getServiceCharge`,
+        `http://localhost:8599/v1/hris/serviceCharge/getServiceCharge`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`, // Add token to headers
@@ -116,7 +116,7 @@ const ServiceChargeComponentManagement = () => {
 
             <div className="flex justify-center">
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={() => setShowPopup(false)}
               >
                 Close

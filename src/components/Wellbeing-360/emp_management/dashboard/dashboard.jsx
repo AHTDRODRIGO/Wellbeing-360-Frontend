@@ -52,7 +52,7 @@ const Dashboard = () => {
     const fetchAttendanceHistory = async () => {
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStatsForLastFiveDays`
+          `http://localhost:8599/v1/hris/employees/getAttendanceStatsForLastFiveDays`
         );
         const result = await response.json();
 
@@ -90,7 +90,7 @@ const Dashboard = () => {
     const fetchBirthdays = async () => {
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/employees/get-birthdays`
+          `http://localhost:8599/v1/hris/employees/get-birthdays`
         );
         const result = await response.json();
 
@@ -122,7 +122,7 @@ const Dashboard = () => {
         const today = moment().format("YYYY-MM-DD");
 
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStats`
+          `http://localhost:8599/v1/hris/employees/getAttendanceStats`
         );
         const result = await response.json();
 
@@ -175,7 +175,7 @@ const Dashboard = () => {
     const fetchPendingLeaves = async () => {
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/leave/getleaveapprove1`
+          `http://localhost:8599/v1/hris/leave/getleaveapprove1`
         );
         const result = await response.json();
 
@@ -363,7 +363,7 @@ const Dashboard = () => {
                 ${
                   appointment.appointment_status === "confirmed"
                     ? "bg-green-100 text-green-700"
-                    : "bg-yellow-100 text-yellow-700"
+                    : "bg-blue-100 text-blue-700"
                 }`}
                           >
                             {appointment.appointment_status}

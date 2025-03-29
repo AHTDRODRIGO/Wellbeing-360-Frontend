@@ -50,7 +50,7 @@ useEffect(() => {
 const fetchData = async () => {
   try {
     const response = await fetch(
-      "https://back-81-guards.casknet.dev/v1/hris/leave/getleave"
+      "http://localhost:8599/v1/hris/leave/getleave"
     );
     const result = await response.json();
     setData(result); // Assuming result is the array of employees
@@ -102,7 +102,7 @@ const handleFilter = () => {}
             key={number}
             onClick={() => handleClick(number)}
             className={`mx-1 px-3 py-1 rounded ${
-              currentPage === number ? "bg-yellow-300 text-black" : "bg-gray-200"
+              currentPage === number ? "bg-blue-300 text-black" : "bg-gray-200"
             }`}
           >
             {number}

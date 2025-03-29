@@ -19,7 +19,7 @@ const Create_Leave_Type = () => {
     const fetchEmployeeTypes = async () => {
         try {
             const response = await fetch(
-                `https://back-81-guards.casknet.dev/v1/hris/leave/get-leave-name`
+                `http://localhost:8599/v1/hris/leave/get-leave-name`
             );
             const data = await response.json();
             if (data.success) {
@@ -47,7 +47,7 @@ const Create_Leave_Type = () => {
 
         try {
             const response = await fetch(
-                `https://back-81-guards.casknet.dev/v1/hris/leave/add-leave-categoryName`,
+                `http://localhost:8599/v1/hris/leave/add-leave-categoryName`,
                 {
                     method: "POST",
                     headers: {
@@ -91,7 +91,7 @@ const Create_Leave_Type = () => {
 
         try {
             const response = await fetch(
-                `https://back-81-guards.casknet.dev/v1/hris/leave/update-leave-category-name?id=${editType.id}`, // Pass ID as a query parameter
+                `http://localhost:8599/v1/hris/leave/update-leave-category-name?id=${editType.id}`, // Pass ID as a query parameter
                 {
                     method: "PUT",
                     headers: {
@@ -131,7 +131,7 @@ const Create_Leave_Type = () => {
 
         try {
             const response = await fetch(
-                `https://back-81-guards.casknet.dev/v1/hris/leave/delete-leave-category-name?id=${typeToDelete.id}`, // Pass ID as query parameter
+                `http://localhost:8599/v1/hris/leave/delete-leave-category-name?id=${typeToDelete.id}`, // Pass ID as query parameter
                 {
                     method: "DELETE",
                 }
@@ -204,7 +204,7 @@ const Create_Leave_Type = () => {
             <p className="text-[26px] mb-8">Leave Management Settings / Add Leave Type</p>
             <div className="flex items-center gap-5">
                 <div>
-                    <button className="bg-yellow-300 text-black p-2 rounded-lg font-semibold">Add Leave Type</button>
+                    <button className="bg-blue-300 text-black p-2 rounded-lg font-semibold">Add Leave Type</button>
                 </div>
 
                 <Link to="/leave-allocation">

@@ -48,7 +48,7 @@ const Permissions = () => {
 
   const fetchRoles = async () => {
     try {
-      const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/user/roles`);
+      const response = await fetch(`http://localhost:8599/v1/hris/user/roles`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -93,7 +93,7 @@ const Permissions = () => {
   const HandleDelete = async () => {
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/user/deleteUserRole?role_id=${roleToDelete}`,
+        `http://localhost:8599/v1/hris/user/deleteUserRole?role_id=${roleToDelete}`,
         {
           method: "DELETE",
         }
@@ -141,7 +141,7 @@ const Permissions = () => {
       </div>
       {/* third layer */}
       <div className="mt-5">
-        <div className="px-5 py-2 bg-yellow-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60">
+        <div className="px-5 py-2 bg-blue-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60">
           <div className="flex items-center justify-between">
             <Link to="/create-user-permission">
               <button>Create new permission </button>

@@ -29,7 +29,7 @@ const SalaryBreakdown = () => {
     const fetchEmployees = async () => {
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/payroll/getallwithname`
+          `http://localhost:8599/v1/hris/payroll/getallwithname`
         );
         if (!response.ok) {
           throw new Error("Error fetching employee data");
@@ -49,7 +49,7 @@ const SalaryBreakdown = () => {
     // Fetch Components
     const fetchComponents = async () => {
       try {
-        const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/payroll/columns`);
+        const response = await fetch(`http://localhost:8599/v1/hris/payroll/columns`);
         if (!response.ok) {
           throw new Error("Failed to fetch components");
         }
@@ -105,7 +105,7 @@ const SalaryBreakdown = () => {
     setSelectedEmployee(selected);
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/getallbyemployee?employee_no=${employee_no}`
+        `http://localhost:8599/v1/hris/payroll/getallbyemployee?employee_no=${employee_no}`
       );
 
       if (response.ok) {
@@ -241,7 +241,7 @@ const SalaryBreakdown = () => {
       {/* Pagination Controls */}
       <div className="flex items-center justify-between mt-4">
         <button
-          className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+          className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
         >
@@ -251,7 +251,7 @@ const SalaryBreakdown = () => {
           Page {currentPage} of {totalPages}
         </p>
         <button
-          className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+          className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
           onClick={() =>
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }

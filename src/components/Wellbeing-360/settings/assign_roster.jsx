@@ -27,7 +27,7 @@ const AssignRooster = () => {
   useEffect(() => {
     const fetchTimetableData = async () => {
       try {
-        const response = await axios.get(`https://back-81-guards.casknet.dev/v1/hris/timetable/gettimetable`);
+        const response = await axios.get(`http://localhost:8599/v1/hris/timetable/gettimetable`);
         setTimetables(response.data);
       } catch (error) {
         console.error("Error fetching timetable data:", error);
@@ -35,7 +35,7 @@ const AssignRooster = () => {
     };
     const fetchEmployeeData = async () => {
       try {
-        const response = await axios.get(`https://back-81-guards.casknet.dev/v1/hris/employees/getemployeebasicdetails`);
+        const response = await axios.get(`http://localhost:8599/v1/hris/employees/getemployeebasicdetails`);
         setEmployeeData(response.data);
         setFilteredEmployeeData(response.data); // Set filtered data initially
       } catch (error) {
@@ -98,7 +98,7 @@ const AssignRooster = () => {
   useEffect(() => {
     const fetchEmployeeRosterData = async () => {
       try {
-        const response = await axios.get(`https://back-81-guards.casknet.dev/v1/hris/timetable/getemployeeswithroster`);
+        const response = await axios.get(`http://localhost:8599/v1/hris/timetable/getemployeeswithroster`);
         // Ensure the data structure matches your expectations
         if (response.data && response.data.employeesWithRosters) {
           // Map the response data into an array if it's not already
@@ -202,7 +202,7 @@ const AssignRooster = () => {
     setShowViewRosterModal(true); // Open modal immediately
     try {
       const response = await axios.get(
-        `https://back-81-guards.casknet.dev/v1/hris/timetable/getemployeerosterdetails`,
+        `http://localhost:8599/v1/hris/timetable/getemployeerosterdetails`,
         { params: { employee_no: employee.employee_no } }
       );
       console.log("Roster details response:", response.data); // Debugging log
@@ -225,7 +225,7 @@ const AssignRooster = () => {
   const handleDeleteRoster = async (scheduleID) => {
     try {
       const response = await axios.delete(
-        `https://back-81-guards.casknet.dev/v1/hris/timetable/deleteEmployeeRosterDetails`,
+        `http://localhost:8599/v1/hris/timetable/deleteEmployeeRosterDetails`,
         { params: { schedule_id: scheduleID } }
       );
       if (response.status === 200) {
@@ -255,7 +255,7 @@ const AssignRooster = () => {
       const postData = { employees: employeesData };
 
       const response = await axios.post(
-        `https://back-81-guards.casknet.dev/v1/hris/timetable/addrostertimetable`, // Updated endpoint
+        `http://localhost:8599/v1/hris/timetable/addrostertimetable`, // Updated endpoint
         postData
       );
 
@@ -333,7 +333,7 @@ const AssignRooster = () => {
                 <button
                   key={pageNumber}
                   onClick={() => handlePageClick(pageNumber)}
-                  className={`px-4 py-2 rounded ${pageNumber === currentPage ? "bg-yellow-300 text-black" : "bg-gray-200 text-gray-700"
+                  className={`px-4 py-2 rounded ${pageNumber === currentPage ? "bg-blue-300 text-black" : "bg-gray-200 text-gray-700"
                     }`}
                 >
                   {pageNumber}
@@ -345,7 +345,7 @@ const AssignRooster = () => {
             {totalPages > 5 && (
               <button
                 onClick={handleSeeMore}
-                className="bg-yellow-300 text-black px-4 py-2 rounded"
+                className="bg-blue-300 text-black px-4 py-2 rounded"
               >
                 See More
               </button>
@@ -538,7 +538,7 @@ const AssignRooster = () => {
               <button onClick={closeAssignRosterModal} className="bg-gray-500 text-white px-4 py-2 rounded mr-2">
                 Cancel
               </button>
-              <button onClick={handleAssignRosterSubmit} className="bg-yellow-300 text-black px-4 py-2 rounded">
+              <button onClick={handleAssignRosterSubmit} className="bg-blue-300 text-black px-4 py-2 rounded">
                 Assign
               </button>
             </div>
@@ -554,7 +554,7 @@ const AssignRooster = () => {
             <p className="text-lg mb-4">Roster timetable assigned successfully.</p>
             <button
               onClick={() => setShowSuccessPopup(false)}  // Close the popup
-              className="bg-yellow-300 text-black px-4 py-2 rounded"
+              className="bg-blue-300 text-black px-4 py-2 rounded"
             >
               OK
             </button>

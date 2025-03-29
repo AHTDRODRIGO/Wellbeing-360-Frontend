@@ -64,7 +64,7 @@ const Emp_Management = () => {
               {card.title}
             </h3>
             <div className="text-center text-gray-500 mb-4"></div>
-            <button className="mt-auto bg-yellow-300 text-black rounded-lg px-4 py-2 hover:bg-black hover:text-white">
+            <button className="mt-auto bg-blue-300 text-black rounded-lg px-4 py-2 hover:bg-black hover:text-white">
               View
             </button>
           </div>

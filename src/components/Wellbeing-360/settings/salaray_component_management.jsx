@@ -30,7 +30,7 @@ const SalaryComponentManagement = () => {
   const fetchTableData = async () => {
     try {
       const response = await fetch(
-        "https://back-81-guards.casknet.dev/v1/hris/payroll/columns"
+        "http://localhost:8599/v1/hris/payroll/columns"
       );
       if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -49,7 +49,7 @@ const SalaryComponentManagement = () => {
   const fetchCurrencyData = async () => {
     try {
       const response = await fetch(
-        "https://back-81-guards.casknet.dev/v1/hris/currency/list"
+        "http://localhost:8599/v1/hris/currency/list"
       );
       if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -82,7 +82,7 @@ const SalaryComponentManagement = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/getRemainingColumns?type=${selectedValue.toLowerCase()}`
+        `http://localhost:8599/v1/hris/payroll/getRemainingColumns?type=${selectedValue.toLowerCase()}`
       );
       if (!response.ok)
         throw new Error(`Error ${response.status}: ${response.statusText}`);
@@ -115,7 +115,7 @@ const SalaryComponentManagement = () => {
 
     try {
       const response = await fetch(
-        "https://back-81-guards.casknet.dev/v1/hris/payroll/column-suggestions",
+        "http://localhost:8599/v1/hris/payroll/column-suggestions",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -169,7 +169,7 @@ const SalaryComponentManagement = () => {
     try {
       setIsSaving(true); // Show saving state
   
-      const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/currency/update/1`, {
+      const response = await fetch(`http://localhost:8599/v1/hris/currency/update/1`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -284,7 +284,7 @@ const SalaryComponentManagement = () => {
             {/* Close Button */}
             <div className="flex justify-center">
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={() => setShowPopup(false)}
               >
                 Close
@@ -349,7 +349,7 @@ const SalaryComponentManagement = () => {
                 </button>
                 <button
                   type="button"
-                  className="px-4 py-2 bg-yellow-300 text-black rounded-lg"
+                  className="px-4 py-2 bg-blue-300 text-black rounded-lg"
                   onClick={handleSave}
                 >
                   {isSaving ? "Saving..." : "Save"}
@@ -398,7 +398,7 @@ const SalaryComponentManagement = () => {
           </button>
           <button
             type="button"
-            className="px-4 py-2 bg-yellow-300 text-black rounded-lg"
+            className="px-4 py-2 bg-blue-300 text-black rounded-lg"
             onClick={handleCurrencySave}
           >
             {isSaving ? "Saving..." : "Save"}

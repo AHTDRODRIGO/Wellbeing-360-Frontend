@@ -26,7 +26,7 @@ const Leave_Allocation = () => {
 
     // Fetch Nationalities
     useEffect(() => {
-        fetch('https://back-81-guards.casknet.dev/v1/hris/religionsAndNationalities/nationalities')
+        fetch('http://localhost:8599/v1/hris/religionsAndNationalities/nationalities')
             .then(response => response.json())
             .then(data => setNationalities(data))  // Set nationalities in state
             .catch(error => console.error('Error fetching nationalities:', error));
@@ -34,14 +34,14 @@ const Leave_Allocation = () => {
 
     // Fetch Religions
     useEffect(() => {
-        fetch('https://back-81-guards.casknet.dev/v1/hris/religionsAndNationalities/religions')
+        fetch('http://localhost:8599/v1/hris/religionsAndNationalities/religions')
             .then(response => response.json())
             .then(data => setReligions(data))  // Set religions in state
             .catch(error => console.error('Error fetching religions:', error));
     }, []);
 
     useEffect(() => {
-        fetch('https://back-81-guards.casknet.dev/v1/hris/employmentType/all')
+        fetch('http://localhost:8599/v1/hris/employmentType/all')
             .then(response => response.json())
             .then(data => setEmploymentTypes(data.data))  // Set employment types in state
             .catch(error => console.error('Error fetching employment types:', error));
@@ -50,7 +50,7 @@ const Leave_Allocation = () => {
     // Fetch Leave Types
     // Fetch Leave Types
     useEffect(() => {
-        fetch('https://back-81-guards.casknet.dev/v1/hris/leave/get-leave-name')
+        fetch('http://localhost:8599/v1/hris/leave/get-leave-name')
             .then(response => response.json())
             .then(data => {
                 if (data.success && Array.isArray(data.data)) {
@@ -87,7 +87,7 @@ const Leave_Allocation = () => {
         console.log(updatedFormData);
 
         // Submit the updated form data
-        fetch('https://back-81-guards.casknet.dev/v1/hris/leave/add-leaveCategory/', {
+        fetch('http://localhost:8599/v1/hris/leave/add-leaveCategory/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ const Leave_Allocation = () => {
                 </Link>
 
                 <div>
-                    <button className="bg-yellow-300 text-black p-2 rounded-lg font-semibold">Leave Allocation</button>
+                    <button className="bg-blue-300 text-black p-2 rounded-lg font-semibold">Leave Allocation</button>
                 </div>
                 <div>
                     <button>Reset Leave</button>
@@ -391,7 +391,7 @@ const Leave_Allocation = () => {
                         Cancel
                     </button>
                     <button
-                        className="bg-yellow-300 text-black px-4 py-2 rounded-md"
+                        className="bg-blue-300 text-black px-4 py-2 rounded-md"
                         onClick={handleSubmit}
                     >
                         Add

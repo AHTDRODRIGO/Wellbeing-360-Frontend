@@ -25,7 +25,7 @@ const EmployeeTable = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/81guards/employees/get-all`
+          `http://localhost:8599/v1/wellbeing360/employees/get-all`
         );
         const data = await response.json();
         if (data && Array.isArray(data.employees)) {
@@ -112,7 +112,7 @@ const EmployeeTable = () => {
         </select>
         <button
           onClick={applyFilters}
-          className="bg-yellow-300 text-black px-4 py-2 rounded flex items-center gap-2"
+          className="bg-blue-300 text-black px-4 py-2 rounded flex items-center gap-2"
         >
           <CiSearch /> Search
         </button>
@@ -176,7 +176,7 @@ const EmployeeTable = () => {
                   key={index}
                   onClick={() => setCurrentPage(index + 1)}
                   className={`px-3 py-1 border rounded ${
-                    currentPage === index + 1 ? "bg-yellow-300" : ""
+                    currentPage === index + 1 ? "bg-blue-300" : ""
                   }`}
                 >
                   {index + 1}

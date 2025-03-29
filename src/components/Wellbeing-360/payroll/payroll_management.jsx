@@ -129,7 +129,7 @@ const PayrollManagement = () => {
 
         // Fetch attendance stats
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStats`
+          `http://localhost:8599/v1/hris/employees/getAttendanceStats`
         );
         const result = await response.json();
 
@@ -145,7 +145,7 @@ const PayrollManagement = () => {
 
         // Fetch absent workforce count
         const absentResponse = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/attendence/getNotAttendCount?startDate=${today}&endDate=${today}`
+          `http://localhost:8599/v1/hris/attendence/getNotAttendCount?startDate=${today}&endDate=${today}`
         );
         const absentResult = await absentResponse.json();
 
@@ -163,7 +163,7 @@ const PayrollManagement = () => {
 
         // Fetch allowance and deduction counts
         const adResponse = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/payroll/allowances-deductions-count`
+          `http://localhost:8599/v1/hris/payroll/allowances-deductions-count`
         );
         const adResult = await adResponse.json();
 
@@ -215,7 +215,7 @@ const PayrollManagement = () => {
               <span className="block font-bold">{card.count}</span>
               <span>{card.label}</span>
             </div>
-            <button className="mt-auto bg-yellow-300 text-black rounded-lg px-4 py-2 hover:bg-blue-600">
+            <button className="mt-auto bg-blue-300 text-black rounded-lg px-4 py-2 hover:bg-blue-600">
               View
             </button>
           </div>

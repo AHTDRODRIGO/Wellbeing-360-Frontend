@@ -19,7 +19,7 @@ const History_Logged_Details = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/logs/audit-logs`);
+        const response = await fetch(`http://localhost:8599/v1/hris/logs/audit-logs`);
         const data = await response.json();
         setHistoryData(data);
       } catch (error) {
@@ -162,7 +162,7 @@ const History_Logged_Details = () => {
 
       <div className="flex justify-center mt-4">
         <button
-          className={`px-3 py-1 mx-1 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-yellow-300 text-black"}`}
+          className={`px-3 py-1 mx-1 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-blue-300 text-black"}`}
           disabled={currentPage === 1}
           onClick={() => handlePageChange(currentPage - 1)}
         >
@@ -171,14 +171,14 @@ const History_Logged_Details = () => {
         {Array.from({ length: totalPages }, (_, i) => (
           <button
             key={i}
-            className={`px-3 py-1 mx-1 rounded ${currentPage === i + 1 ? "bg-yellow-300 text-black" : "bg-gray-200"}`}
+            className={`px-3 py-1 mx-1 rounded ${currentPage === i + 1 ? "bg-blue-300 text-black" : "bg-gray-200"}`}
             onClick={() => handlePageChange(i + 1)}
           >
             {i + 1}
           </button>
         ))}
         <button
-          className={`px-3 py-1 mx-1 rounded ${currentPage === totalPages ? "bg-gray-300" : "bg-yellow-300 text-black"}`}
+          className={`px-3 py-1 mx-1 rounded ${currentPage === totalPages ? "bg-gray-300" : "bg-blue-300 text-black"}`}
           disabled={currentPage === totalPages}
           onClick={() => handlePageChange(currentPage + 1)}
         >

@@ -32,9 +32,9 @@
   font-weight: bold;
 }
 
-/* Style for special days (e.g., yellow background) */
+/* Style for special days (e.g., blue background) */
 .special-day {
-  background-color: #ffd700 !important; /* Yellow color */
+  background-color: #ffd700 !important; /* blue color */
   color: black !important;
   border-radius: 20%;
   font-weight: bold;

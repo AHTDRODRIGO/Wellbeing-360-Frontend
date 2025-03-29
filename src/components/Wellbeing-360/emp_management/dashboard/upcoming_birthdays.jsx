@@ -5,7 +5,7 @@ const Upcoming_Birthdays = () => {
     const requests = [
         { name: "Talan Culhane", id: "Emp74651", date: "2025 Jan 25", color: "bg-purple-200" },
         { name: "Ruben Carder", id: "Emp74651", date: "2025 Jan 25", color: "bg-green-200" },
-        { name: "Jakob Schleifer", id: "Emp74651", date: "2025 Jan 25", color: "bg-yellow-200" },
+        { name: "Jakob Schleifer", id: "Emp74651", date: "2025 Jan 25", color: "bg-blue-200" },
         { name: "Terry Westervelt", id: "Emp74651", date: "2025 Jan 25", color: "bg-red-200" },
     ];
 

@@ -37,7 +37,7 @@ const CheckPointHistory = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/getCheckpointsByClient?client_id=${client.id}`
+        `http://localhost:8599/v1/81guards/checkpoints/getCheckpointsByClient?client_id=${client.id}`
       );
       if (!response.ok) throw new Error("Failed to fetch checkpoints");
       const data = await response.json();
@@ -57,7 +57,7 @@ const CheckPointHistory = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/getcheckpointhistory?checkpoint_id=${checkpoint.id}`
+        `http://localhost:8599/v1/81guards/checkpoints/getcheckpointhistory?checkpoint_id=${checkpoint.id}`
       );
       if (!response.ok) throw new Error("Failed to fetch checkpoint history");
 
@@ -90,7 +90,7 @@ const CheckPointHistory = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/getScansByEmployee?employee_no=${employeeSearch}`
+        `http://localhost:8599/v1/81guards/checkpoints/getScansByEmployee?employee_no=${employeeSearch}`
       );
       if (!response.ok) throw new Error("Failed to fetch history by employee");
 
@@ -181,7 +181,7 @@ const CheckPointHistory = () => {
         </div>
         {/* Add Checkpoint Button */}
         <button
-          className="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-black hover:text-white"
+          className="bg-blue-300 text-black px-4 py-2 rounded hover:bg-black hover:text-white"
           onClick={() => setShowEmployeePopup(true)}
         >
           + Get According to Employee
@@ -266,7 +266,7 @@ const CheckPointHistory = () => {
                 />
                 <button
                   onClick={fetchHistoryByEmployee}
-                  className="bg-yellow-300 text-black px-4 py-2 rounded"
+                  className="bg-blue-300 text-black px-4 py-2 rounded"
                 >
                   Get Scan History
                 </button>
@@ -313,7 +313,7 @@ const CheckPointHistory = () => {
 
                   <button
                     onClick={applyFilters}
-                    className="bg-yellow-300 text-black px-4 py-2 rounded"
+                    className="bg-blue-300 text-black px-4 py-2 rounded"
                   >
                     Apply Filter
                   </button>
@@ -401,7 +401,7 @@ const CheckPointHistory = () => {
               />
               <button
                 onClick={applyFilters}
-                className="bg-yellow-300 text-black px-4 py-2 rounded"
+                className="bg-blue-300 text-black px-4 py-2 rounded"
               >
                 Apply Filter
               </button>

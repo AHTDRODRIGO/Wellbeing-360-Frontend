@@ -16,7 +16,7 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
       try {
         console.log(`Fetching employee data for: ${employeeNo}`);
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/81guards/employees/employee?employee_no=${employeeNo}`
+          `http://localhost:8599/v1/wellbeing360/employees/employee?employee_no=${employeeNo}`
         );
         if (!response.ok) throw new Error("Failed to fetch employee data");
 
@@ -52,7 +52,7 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
     try {
       console.log("Updating employee data:", employeeData);
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/employees/employee?employee_no=${employeeNo}`,
+        `http://localhost:8599/v1/81guards/employees/employee?employee_no=${employeeNo}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -214,7 +214,7 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
               </button>
               <button
                 type="submit"
-                className="bg-yellow-300 text-black px-4 py-2 rounded"
+                className="bg-blue-300 text-black px-4 py-2 rounded"
               >
                 Update
               </button>
@@ -236,7 +236,7 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
               <p className="text-center mb-4">{popupMessage}</p>
               <div className="flex justify-center">
                 <button
-                  className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                  className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                   onClick={() => setShowPopup(false)}
                 >
                   Close

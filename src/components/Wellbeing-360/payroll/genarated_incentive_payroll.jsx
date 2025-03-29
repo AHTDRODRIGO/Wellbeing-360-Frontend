@@ -28,7 +28,7 @@ const ServiceChargeFetcher = () => {
                 employee_name: employeeName,
             });
 
-            const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/serviceCharge/getServiceCharge?${queryParams}`);
+            const response = await fetch(`http://localhost:8599/v1/hris/serviceCharge/getServiceCharge?${queryParams}`);
             const result = await response.json();
 
             if (response.ok) {
@@ -132,7 +132,7 @@ const ServiceChargeFetcher = () => {
                     <button
                         onClick={handleGenerate}
                         disabled={isLoading}
-                        className="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-blue-600"
+                        className="bg-blue-300 text-black px-4 py-2 rounded hover:bg-blue-600"
                     >
                         {isLoading ? "Loading..." : "Generate"}
                     </button>

@@ -30,7 +30,7 @@ function TimetableManagement() {
   const [editTimetableId, setEditTimetableId] = useState(null);
   const API_URL = process.env.REACT_APP_FRONTEND_URL;
   useEffect(() => {
-    fetch(`https://back-81-guards.casknet.dev/v1/hris/timetable/gettimetable`)
+    fetch(`http://localhost:8599/v1/hris/timetable/gettimetable`)
       .then((response) => response.json())
       .then((data) => {
         setTimetableData(Array.isArray(data) ? data : []);
@@ -39,7 +39,7 @@ function TimetableManagement() {
   }, []);
 
   useEffect(() => {
-    fetch(`https://back-81-guards.casknet.dev/v1/hris/employees/getemployeebasicdetails`)
+    fetch(`http://localhost:8599/v1/hris/employees/getemployeebasicdetails`)
       .then((response) => response.json())
       .then((data) => {
         setEmployeeData(Array.isArray(data) ? data : []);
@@ -92,7 +92,7 @@ function TimetableManagement() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch(`https://back-81-guards.casknet.dev/v1/hris/timetable/addtimetable`, {
+    fetch(`http://localhost:8599/v1/hris/timetable/addtimetable`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -125,7 +125,7 @@ function TimetableManagement() {
 
   const confirmDelete = () => {
     fetch(
-      `https://back-81-guards.casknet.dev/v1/hris/timetable/deletetimetable?timetableID=${deleteItemId}`,
+      `http://localhost:8599/v1/hris/timetable/deletetimetable?timetableID=${deleteItemId}`,
       {
         method: "DELETE",
       }
@@ -165,7 +165,7 @@ function TimetableManagement() {
           <div>
             <div className="flex justify-between items-center">
               <button
-                className="px-5 py-2 bg-yellow-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60"
+                className="px-5 py-2 bg-blue-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60"
                 onClick={handleSend}
               >
                 + Create Timetable

@@ -38,7 +38,7 @@ const Designation = () => {
   }, []);
 
   const fetchDesignations = () => {
-    fetch(`https://back-81-guards.casknet.dev/v1/hris/designations/getdesignation`)
+    fetch(`http://localhost:8599/v1/hris/designations/getdesignation`)
       .then((response) => response.json())
       .then((result) => {
         if (Array.isArray(result)) {
@@ -82,8 +82,8 @@ const Designation = () => {
     };
 
     const url = isEditMode
-      ? `https://back-81-guards.casknet.dev/v1/hris/designations/updatedesignation?id=${currentDesignation.id}`
-      : `https://back-81-guards.casknet.dev/v1/hris/designations/adddesignation`;
+      ? `http://localhost:8599/v1/hris/designations/updatedesignation?id=${currentDesignation.id}`
+      : `http://localhost:8599/v1/hris/designations/adddesignation`;
 
     const method = isEditMode ? "PUT" : "POST";
 
@@ -168,7 +168,7 @@ const Designation = () => {
       "Are you sure you want to delete this designation?"
     );
     if (confirmDelete) {
-      fetch(`https://back-81-guards.casknet.dev/v1/hris/designations/deletedesignation?id=${id}`, {
+      fetch(`http://localhost:8599/v1/hris/designations/deletedesignation?id=${id}`, {
         method: "DELETE",
       })
         .then((response) => {
@@ -229,7 +229,7 @@ const Designation = () => {
 
       <div className="mt-5">
         <button
-          className="px-5 py-2 bg-yellow-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60"
+          className="px-5 py-2 bg-blue-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60"
           onClick={() => {
             setIsEditMode(false); // Disable edit mode
             setCurrentDesignation({}); // Clear current designation
@@ -274,7 +274,7 @@ const Designation = () => {
                 <div className="flex gap-5 justify-start">
                   <button
                     type="submit"
-                    className="bg-yellow-300 text-black px-4 py-2 rounded-md mr-2"
+                    className="bg-blue-300 text-black px-4 py-2 rounded-md mr-2"
                   >
                     {isEditMode ? "Update" : "Save"}
                   </button>
@@ -404,7 +404,7 @@ const Designation = () => {
               {/* Close Button */}
               <div className="flex justify-center">
                 <button
-                  className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                  className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                   onClick={() => setShowPopup(false)}
                 >
                   Close

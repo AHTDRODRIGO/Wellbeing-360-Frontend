@@ -64,7 +64,7 @@ const Generatedpayrolls = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/payrollEmployees?year=${year}&month=${month}`
+        `http://localhost:8599/v1/hris/payroll/payrollEmployees?year=${year}&month=${month}`
       );
 
       const data = await response.json();
@@ -101,7 +101,7 @@ const Generatedpayrolls = () => {
     setSelectedEmployee({ employee_no, employee_fullname, employee_email }); // Store employee details
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/calculatepayrollbyemployee?employee_no=${employee_no}&month=${month}&year=${year}`
+        `http://localhost:8599/v1/hris/payroll/calculatepayrollbyemployee?employee_no=${employee_no}&month=${month}&year=${year}`
       );
       const data = await response.json();
 
@@ -180,7 +180,7 @@ const Generatedpayrolls = () => {
     try {
       // Trigger GET request
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/allActiveEmployeesPayroll?year=${year}&month=${month}`
+        `http://localhost:8599/v1/hris/payroll/allActiveEmployeesPayroll?year=${year}&month=${month}`
       );
       const data = await response.json();
 
@@ -297,7 +297,7 @@ const Generatedpayrolls = () => {
 
           <div className="flex items-end">
             <button
-              className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
               onClick={fetchEmployeeData}
               disabled={isLoading}
             >
@@ -668,7 +668,7 @@ const Generatedpayrolls = () => {
               {/* Close Button */}
               <div className="flex justify-center">
                 <button
-                  className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600 focus:outline-none"
+                  className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600 focus:outline-none"
                   onClick={closePopup}
                 >
                   Close
@@ -681,7 +681,7 @@ const Generatedpayrolls = () => {
         {/* Pagination Controls */}
         <div className="flex items-center justify-between mt-4">
           <button
-            className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
             onClick={handlePrevPage}
             disabled={currentPage === 1}
           >
@@ -691,7 +691,7 @@ const Generatedpayrolls = () => {
             Page {currentPage} of {totalPages}
           </p>
           <button
-            className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
             onClick={handleNextPage}
             disabled={currentPage === totalPages}
           >

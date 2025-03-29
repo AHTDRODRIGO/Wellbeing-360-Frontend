@@ -53,7 +53,7 @@ const MonthEndPayroll = () => {
     setLoading(true); // Show loader
     try {
       const response = await fetch(
-        "https://back-81-guards.casknet.dev/v1/hris/payroll/calculate-payroll",
+        "http://localhost:8599/v1/hris/payroll/calculate-payroll",
         {
           method: "POST",
           headers: {
@@ -93,7 +93,7 @@ const MonthEndPayroll = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/calculatepayrollbyemployee?employee_no=${employee_no}&month=${selectedMonth}&year=${selectedYear}`
+        `http://localhost:8599/v1/hris/payroll/calculatepayrollbyemployee?employee_no=${employee_no}&month=${selectedMonth}&year=${selectedYear}`
       );
       const result = await response.json();
 
@@ -620,7 +620,7 @@ const MonthEndPayroll = () => {
             <p className="text-center mb-4">{popupMessage}</p>
             <div className="flex justify-center">
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={closePopup}
               >
                 Close

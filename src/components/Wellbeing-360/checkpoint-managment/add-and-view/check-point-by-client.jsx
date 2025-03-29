@@ -43,7 +43,7 @@ const CheckPointByClient = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/getCheckpointsByClient?client_id=${client.id}`
+        `http://localhost:8599/v1/81guards/checkpoints/getCheckpointsByClient?client_id=${client.id}`
       );
       if (!response.ok) throw new Error("Failed to fetch checkpoints");
       const data = await response.json();
@@ -59,7 +59,7 @@ const CheckPointByClient = () => {
   const fetchEmployees = async () => {
     try {
       const response = await fetch(
-        "https://back-81-guards.casknet.dev/v1/81guards/employees/get-all"
+        "http://localhost:8599/v1/81guards/employees/get-all"
       );
       if (!response.ok) throw new Error("Failed to fetch employees");
       const data = await response.json();
@@ -111,8 +111,8 @@ const CheckPointByClient = () => {
     try {
       const method = editingCheckpoint ? "PUT" : "POST";
       const endpoint = editingCheckpoint
-        ? `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/update?checkpoint_id=${editingCheckpoint.id}`
-        : `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/addCheckpoint`;
+        ? `http://localhost:8599/v1/81guards/checkpoints/update?checkpoint_id=${editingCheckpoint.id}`
+        : `http://localhost:8599/v1/81guards/checkpoints/addCheckpoint`;
 
       const response = await fetch(endpoint, {
         method,
@@ -137,7 +137,7 @@ const CheckPointByClient = () => {
   const handleViewMore = async (checkpoint) => {
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/getCheckpointWithEmployees?checkpoint_id=${checkpoint.id}`
+        `http://localhost:8599/v1/81guards/checkpoints/getCheckpointWithEmployees?checkpoint_id=${checkpoint.id}`
       );
       if (!response.ok) throw new Error("Failed to fetch checkpoint details");
       const data = await response.json();
@@ -146,7 +146,7 @@ const CheckPointByClient = () => {
 
       // Fetch and Set QR Code URL
       const qrCodeResponse = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/checkpoints/getCheckpointQRCode?checkpoint_id=${checkpoint.id}`
+        `http://localhost:8599/v1/81guards/checkpoints/getCheckpointQRCode?checkpoint_id=${checkpoint.id}`
       );
       if (qrCodeResponse.ok) {
         setQrCodeUrl(qrCodeResponse.url);
@@ -174,7 +174,7 @@ const CheckPointByClient = () => {
 
         {/* Add Checkpoint Button */}
         <button
-          className="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-black hover:text-white"
+          className="bg-blue-300 text-black px-4 py-2 rounded hover:bg-black hover:text-white"
           onClick={handleAddCheckpoint}
         >
           + Add Checkpoint
@@ -340,7 +340,7 @@ const CheckPointByClient = () => {
                   className="mx-auto w-32 h-32 border border-gray-300 p-2"
                 />
                 <button
-                  className="mt-2 bg-yellow-300 text-black px-4 py-2 rounded"
+                  className="mt-2 bg-blue-300 text-black px-4 py-2 rounded"
                   onClick={handleDownloadQR}
                 >
                   Download QR Code

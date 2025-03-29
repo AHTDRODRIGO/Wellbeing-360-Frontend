@@ -3,7 +3,7 @@ import { FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 
 const API_URL = "http://localhost:8590";
 const EMPLOYEE_API =
-  "https://back-81-guards.casknet.dev/v1/81guards/employees/get-all";
+  "http://localhost:8599/v1/81guards/employees/get-all";
 
 const ClientManagement = () => {
   const [clients, setClients] = useState([]);
@@ -197,7 +197,7 @@ const ClientManagement = () => {
         <h2 className="text-2xl font-bold">Client Management</h2>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-yellow-300 text-black px-4 py-2 rounded hover:bg-blue-600 transition flex items-center gap-2"
+          className="bg-blue-300 text-black px-4 py-2 rounded hover:bg-blue-600 transition flex items-center gap-2"
         >
           <FaPlus /> Add Client
         </button>
@@ -268,7 +268,7 @@ const ClientManagement = () => {
                 key={index}
                 onClick={() => setCurrentPage(index + 1)}
                 className={`px-3 py-1 border rounded ${
-                  currentPage === index + 1 ? "bg-yellow-300" : ""
+                  currentPage === index + 1 ? "bg-blue-300" : ""
                 }`}
               >
                 {index + 1}
@@ -464,7 +464,7 @@ const ClientManagement = () => {
             {/* Close Button */}
             <div className="flex justify-center">
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={() => setShowPopupMessage(false)}
               >
                 Close

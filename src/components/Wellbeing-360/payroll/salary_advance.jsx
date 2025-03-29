@@ -39,7 +39,7 @@ const AllowanceComponent = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/getAllEmployeesWithSalaryAdvanceStatus`
+        `http://localhost:8599/v1/hris/payroll/getAllEmployeesWithSalaryAdvanceStatus`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch employee data");
@@ -137,7 +137,7 @@ const AllowanceComponent = () => {
         setIsLoading(true); // Indicate loading state
   
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/payroll/salary-advance/${employee.employee_no}`
+          `http://localhost:8599/v1/hris/payroll/salary-advance/${employee.employee_no}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch salary advance details");
@@ -209,7 +209,7 @@ const AllowanceComponent = () => {
 
       // Send the POST request
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/salary-advance`,
+        `http://localhost:8599/v1/hris/payroll/salary-advance`,
         {
           method: "POST",
           headers: {
@@ -278,7 +278,7 @@ const AllowanceComponent = () => {
       };
       console.log("sentdata", payload);
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/salary-advance/${selectedEmployee.salaryAdvance.id}`,
+        `http://localhost:8599/v1/hris/payroll/salary-advance/${selectedEmployee.salaryAdvance.id}`,
         {
           method: "PUT",
           headers: {
@@ -327,7 +327,7 @@ const AllowanceComponent = () => {
       };
 
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/updateallowancetoemployee`,
+        `http://localhost:8599/v1/hris/payroll/updateallowancetoemployee`,
         {
           method: "PUT",
           headers: {
@@ -386,7 +386,7 @@ const AllowanceComponent = () => {
           </div>
           <div className="flex items-end">
             <button
-              className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
               onClick={handleSearch}
             >
               Search
@@ -645,7 +645,7 @@ const AllowanceComponent = () => {
               </button>
               {selectedEmployee.salaryAdvance?.id ? (
                 <button
-                  className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                  className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                   onClick={handleUpdate}
                   disabled={isSaving}
                 >
@@ -653,7 +653,7 @@ const AllowanceComponent = () => {
                 </button>
               ) : (
                 <button
-                  className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                  className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                   onClick={handleSave}
                   disabled={isSaving}
                 >
@@ -691,7 +691,7 @@ const AllowanceComponent = () => {
             {/* Close Button */}
             <div className="flex justify-center">
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={() => setShowPopupMessage(false)}
               >
                 Close
@@ -728,7 +728,7 @@ const AllowanceComponent = () => {
                 No
               </button>
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={handleConfirmDelete}
                 disabled={isSaving}
               >

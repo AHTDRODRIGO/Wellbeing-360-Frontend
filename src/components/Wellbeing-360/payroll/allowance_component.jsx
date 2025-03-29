@@ -52,7 +52,7 @@ const AllowanceComponent = () => {
       }
 
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/allowance-status?${params}`
+        `http://localhost:8599/v1/hris/payroll/allowance-status?${params}`
       );
 
       if (!response.ok) {
@@ -152,7 +152,7 @@ const AllowanceComponent = () => {
         });
 
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/payroll/value?${params}`
+          `http://localhost:8599/v1/hris/payroll/value?${params}`
         );
         if (!response.ok) {
           throw new Error(`Failed to fetch value: ${response.statusText}`);
@@ -212,7 +212,7 @@ const AllowanceComponent = () => {
       };
 
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/addallowancetoemployee`,
+        `http://localhost:8599/v1/hris/payroll/addallowancetoemployee`,
         {
           method: "POST",
           headers: {
@@ -258,7 +258,7 @@ const AllowanceComponent = () => {
       };
 
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/updateallowancetoemployee`,
+        `http://localhost:8599/v1/hris/payroll/updateallowancetoemployee`,
         {
           method: "PUT",
           headers: {
@@ -298,7 +298,7 @@ const AllowanceComponent = () => {
       };
 
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/payroll/updateallowancetoemployee`,
+        `http://localhost:8599/v1/hris/payroll/updateallowancetoemployee`,
         {
           method: "PUT",
           headers: {
@@ -357,7 +357,7 @@ const AllowanceComponent = () => {
           </div>
           <div className="flex items-end">
             <button
-              className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+              className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
               onClick={handleSearch}
             >
               Search
@@ -596,7 +596,7 @@ const AllowanceComponent = () => {
                     Cancel
                   </button>
                   <button
-                    className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                    className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                     onClick={handleSave}
                     disabled={isSaving}
                   >
@@ -621,7 +621,7 @@ const AllowanceComponent = () => {
                     Delete
                   </button>
                   <button
-                    className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                    className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                     onClick={handleUpdate}
                     disabled={isSaving}
                   >
@@ -659,7 +659,7 @@ const AllowanceComponent = () => {
             {/* Close Button */}
             <div className="flex justify-center">
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={() => setShowPopupMessage(false)}
               >
                 Close
@@ -696,7 +696,7 @@ const AllowanceComponent = () => {
                 No
               </button>
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={handleConfirmDelete}
                 disabled={isSaving}
               >

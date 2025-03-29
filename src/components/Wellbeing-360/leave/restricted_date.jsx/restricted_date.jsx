@@ -41,7 +41,7 @@ const Restricted_Date = () => {
     const fetchRestrictedDates = async () => {
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/daterestriction/getAllDataRestrictions`
+          `http://localhost:8599/v1/hris/daterestriction/getAllDataRestrictions`
         );
         const data = await response.json();
         const formattedData = data.map((item) => ({
@@ -96,7 +96,7 @@ const Restricted_Date = () => {
     };
 
     try {
-      const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/leave/addSpecialDay`, {
+      const response = await fetch(`http://localhost:8599/v1/hris/leave/addSpecialDay`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -148,7 +148,7 @@ const Restricted_Date = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/leave/addRestrictedDate`,
+        `http://localhost:8599/v1/hris/leave/addRestrictedDate`,
         {
           method: "POST",
           headers: {
@@ -194,7 +194,7 @@ const Restricted_Date = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/daterestriction/deleteDataRestrictions?id=${selectedRid}`,
+        `http://localhost:8599/v1/hris/daterestriction/deleteDataRestrictions?id=${selectedRid}`,
         {
           method: "DELETE",
           headers: {
@@ -437,7 +437,7 @@ const Restricted_Date = () => {
 
               <button
                 onClick={() => saveDate("Restricted")}
-                className="bg-yellow-300 text-black px-4 py-2 rounded-md"
+                className="bg-blue-300 text-black px-4 py-2 rounded-md"
               >
                 Save Restriction
               </button>
@@ -484,7 +484,7 @@ const Restricted_Date = () => {
               </button>
               <button
                 onClick={() => saveDate("Special Day")}
-                className="bg-yellow-300 text-black px-4 py-2 rounded-md"
+                className="bg-blue-300 text-black px-4 py-2 rounded-md"
               >
                 Save Special Day
               </button>
@@ -554,7 +554,7 @@ const Restricted_Date = () => {
                 onClick={() => setCurrentPage(page)}
                 className={`px-4 py-2 mx-1 rounded-md ${
                   currentPage === page
-                    ? "bg-yellow-300 text-black"
+                    ? "bg-blue-300 text-black"
                     : "bg-gray-200 hover:bg-gray-300"
                 }`}
               >

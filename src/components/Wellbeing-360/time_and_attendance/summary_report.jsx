@@ -29,7 +29,7 @@ const Summary_Report = () => {
     const fetchDepartments = async () => {
       try {
         const response = await fetch(
-          `https://back-81-guards.casknet.dev/v1/hris/designations/getdesignation`
+          `http://localhost:8599/v1/hris/designations/getdesignation`
         );
         const result = await response.json();
         const departmentsData = Array.isArray(result)
@@ -66,10 +66,10 @@ const Summary_Report = () => {
 
       let endpoint;
       if (userType === "superadmin") {
-        endpoint = `https://back-81-guards.casknet.dev/v1/hris/attendence/getLeaveByDateRange?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+        endpoint = `http://localhost:8599/v1/hris/attendence/getLeaveByDateRange?startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
       } else if (userType === "admin") {
         if (supervisorId) {
-          endpoint = `https://back-81-guards.casknet.dev/v1/hris/attendence/getLeaveByDateRange?startDate=${formattedStartDate}&endDate=${formattedEndDate}&supervisorId=${supervisorId}`;
+          endpoint = `http://localhost:8599/v1/hris/attendence/getLeaveByDateRange?startDate=${formattedStartDate}&endDate=${formattedEndDate}&supervisorId=${supervisorId}`;
         } else {
           console.error("Supervisor ID is required for admin users.");
           setIsLoading(false);
@@ -320,7 +320,7 @@ const Summary_Report = () => {
           </select>
           <button
 
-            className="px-2 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600 w-[100px] flex items-center justify-center gap-2"
+            className="px-2 py-2 bg-blue-300 text-black rounded hover:bg-blue-600 w-[100px] flex items-center justify-center gap-2"
           >
             <CiSearch />
             Search
@@ -449,7 +449,7 @@ const Summary_Report = () => {
           </div>
           <div className="flex space-x-2">
             <button
-              className={`px-3 py-1 rounded ${currentPage === 1 ? "bg-gray-200" : "bg-yellow-300 text-black"
+              className={`px-3 py-1 rounded ${currentPage === 1 ? "bg-gray-200" : "bg-blue-300 text-black"
                 }`}
               disabled={currentPage === 1}
             >
@@ -462,7 +462,7 @@ const Summary_Report = () => {
                 page <= totalPages && (
                   <button
                     key={page}
-                    className={`px-3 py-1 rounded ${currentPage === page ? "bg-yellow-300 text-black" : "bg-gray-200"
+                    className={`px-3 py-1 rounded ${currentPage === page ? "bg-blue-300 text-black" : "bg-gray-200"
                       }`}
                   >
                     {page}
@@ -473,7 +473,7 @@ const Summary_Report = () => {
 
             {currentPage + 5 <= totalPages && (
               <button
-                className="px-3 py-1 rounded bg-yellow-300 text-black"
+                className="px-3 py-1 rounded bg-blue-300 text-black"
               >
                 See More
               </button>
@@ -482,7 +482,7 @@ const Summary_Report = () => {
             <button
               className={`px-3 py-1 rounded ${currentPage === totalPages
                 ? "bg-gray-200"
-                : "bg-yellow-300 text-black"
+                : "bg-blue-300 text-black"
                 }`}
               disabled={currentPage === totalPages}
             >

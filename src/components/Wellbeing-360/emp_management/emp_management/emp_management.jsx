@@ -53,7 +53,7 @@ const Emp_Management = () => {
 
                 // Fetch attendance stats
                 const response = await fetch(
-                    `https://back-81-guards.casknet.dev/v1/hris/employees/getAttendanceStats`
+                    `http://localhost:8599/v1/hris/employees/getAttendanceStats`
                 );
                 const result = await response.json();
 
@@ -69,7 +69,7 @@ const Emp_Management = () => {
 
                 // Fetch absent workforce count
                 const absentResponse = await fetch(
-                    `https://back-81-guards.casknet.dev/v1/hris/attendence/getNotAttendCount?startDate=${today}&endDate=${today}`
+                    `http://localhost:8599/v1/hris/attendence/getNotAttendCount?startDate=${today}&endDate=${today}`
                 );
                 const absentResult = await absentResponse.json();
 
@@ -87,7 +87,7 @@ const Emp_Management = () => {
 
                 // Fetch allowance and deduction counts
                 const adResponse = await fetch(
-                    `https://back-81-guards.casknet.dev/v1/hris/payroll/allowances-deductions-count`
+                    `http://localhost:8599/v1/hris/payroll/allowances-deductions-count`
                 );
                 const adResult = await adResponse.json();
 
@@ -139,7 +139,7 @@ const Emp_Management = () => {
                            
                            
                         </div>
-                        <button className="mt-auto bg-yellow-300 text-black rounded-lg px-4 py-2 hover:bg-black hover:text-white">
+                        <button className="mt-auto bg-blue-300 text-black rounded-lg px-4 py-2 hover:bg-black hover:text-white">
                         View
                         </button>
                     </div>

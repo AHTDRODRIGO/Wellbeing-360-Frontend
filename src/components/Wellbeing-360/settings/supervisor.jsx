@@ -26,7 +26,7 @@ const Supervisors = () => {
   }, [currentPage, itemsPerPage]);
 
   const fetchSupervisors = () => {
-    fetch(`https://back-81-guards.casknet.dev/v1/hris/supervisors/getSupervisors`)
+    fetch(`http://localhost:8599/v1/hris/supervisors/getSupervisors`)
       .then((response) => response.json())
       .then((result) => {
         if (Array.isArray(result)) {
@@ -48,7 +48,7 @@ const Supervisors = () => {
     );
     if (confirmDelete) {
       fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/supervisors/deleteSupervisor?supervisor_id=${id}`,
+        `http://localhost:8599/v1/hris/supervisors/deleteSupervisor?supervisor_id=${id}`,
         {
           method: "DELETE",
         }
@@ -93,7 +93,7 @@ const Supervisors = () => {
 
       <div className="mt-5">
         <button
-          className="px-5 py-2 bg-yellow-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60"
+          className="px-5 py-2 bg-blue-300 text-black rounded-md shadow-sm hover:bg-blue-600 w-60"
           onClick={togglePopup}
         >
           Create Supervisor
@@ -221,7 +221,7 @@ const Supervisors = () => {
                 <div className="flex gap-4 justify-end">
                   <button
                     type="button"
-                    className="bg-yellow-300 text-black px-4 py-2 rounded-md"
+                    className="bg-blue-300 text-black px-4 py-2 rounded-md"
                   >
                     Save
                   </button>

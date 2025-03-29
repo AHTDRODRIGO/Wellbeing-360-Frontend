@@ -11,14 +11,14 @@ const Service_Charge_Percentage = () => {
 
   const API_URL =
     process.env.REACT_APP_FRONTEND_URL ||
-    "https://back-81-guards.casknet.dev"; // Fallback to default URL if not provided
+    "http://localhost:8599"; // Fallback to default URL if not provided
 
   // Fetch Employee Data using GET request
   const fetchEmployeeData = async () => {
     const authToken = Cookies.get("auth_token"); // Assuming the auth token is stored as 'auth_token' in the cookies
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/hris/employees/getemployeebasicdetails`,
+        `http://localhost:8599/v1/hris/employees/getemployeebasicdetails`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`, // Add token to headers if available
@@ -105,7 +105,7 @@ const Service_Charge_Percentage = () => {
     // Perform the actual POST request to save data
     try {
       const authToken = Cookies.get("auth_token"); // Get auth token from cookies
-      const response = await fetch(`https://back-81-guards.casknet.dev/v1/hris/serviceCharge/addServiceCharge`, {
+      const response = await fetch(`http://localhost:8599/v1/hris/serviceCharge/addServiceCharge`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -209,7 +209,7 @@ const Service_Charge_Percentage = () => {
           </button>
           <button
             type="button"
-            className="px-4 py-2 bg-yellow-300 text-black rounded-lg"
+            className="px-4 py-2 bg-blue-300 text-black rounded-lg"
             onClick={handleSave}
             disabled={isSaving}
           >
@@ -241,7 +241,7 @@ const Service_Charge_Percentage = () => {
 
             <div className="flex justify-center">
               <button
-                className="px-4 py-2 bg-yellow-300 text-black rounded hover:bg-blue-600"
+                className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
                 onClick={() => setShowPopup(false)}
               >
                 Close
