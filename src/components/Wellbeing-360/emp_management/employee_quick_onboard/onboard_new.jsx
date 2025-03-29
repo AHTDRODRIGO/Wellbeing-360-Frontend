@@ -1,47 +1,48 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaCheckCircle } from "react-icons/fa";
 
 const EmpOnboard = () => {
   const navigate = useNavigate();
-  const API_URL = process.env.REACT_APP_BACKEND_URL;
+
   const [employeeData, setEmployeeData] = useState({
     employee_no: "",
     name: "",
     nic: "",
     date_of_birth: "",
     contact_number: "",
+    weight: "",
+    height: "",
     address: "",
-    employee_category: "",
     employee_type: "",
     department: "",
     designation: "",
     work_location: "",
+    active_status: true,
   });
 
   const [errors, setErrors] = useState({});
   const [showPopupMessage, setShowPopupMessage] = useState(false);
   const [popupMessage, setPopupMessage] = useState("");
-  const [popupType, setPopupType] = useState(""); // "success" or "error"
+  const [popupType, setPopupType] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEmployeeData((prevData) => ({
-      ...prevData,
-      [name]: value,
+    const { name, value, type, checked } = e.target;
+    setEmployeeData((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
     }));
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: "",
-    }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validateForm = () => {
-    let formErrors = {};
-    Object.keys(employeeData).forEach((key) => {
-      if (!employeeData[key]) {
-        formErrors[key] = "This field is required";
+    const formErrors = {};
+    for (const key in employeeData) {
+      if (!employeeData[key] && employeeData[key] !== false) {
+        formErrors[key] = "Required";
       }
-    });
+    }
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
@@ -52,12 +53,10 @@ const EmpOnboard = () => {
 
     try {
       const response = await fetch(
-        `https://back-81-guards.casknet.dev/v1/81guards/employees/add`,
+        `http://localhost:8599/v1/wellbeing360/employees/add`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(employeeData),
         }
       );
@@ -68,111 +67,96 @@ const EmpOnboard = () => {
         setPopupMessage("Employee added successfully!");
         setPopupType("success");
         setShowPopupMessage(true);
-
         setTimeout(() => {
           setShowPopupMessage(false);
-          navigate("/emp-details"); // Redirect after success
-        }, 3000);
-
-        setEmployeeData({
-          employee_no: "",
-          name: "",
-          nic: "",
-          date_of_birth: "",
-          contact_number: "",
-          address: "",
-          employee_category: "",
-          employee_type: "",
-          department: "",
-          designation: "",
-          work_location: "",
-        });
+          navigate("/emp-details");
+        }, 2500);
       } else {
-        setPopupMessage(result.message || "Failed to add employee");
-        setPopupType("error");
-        setShowPopupMessage(true);
-
-        setTimeout(() => {
-          setShowPopupMessage(false);
-        }, 3000);
+        throw new Error(result.message || "Failed to add employee");
       }
-    } catch (error) {
-      console.error("Error submitting employee data:", error);
-      setPopupMessage("Error submitting employee data.");
+    } catch (err) {
+      setPopupMessage(err.message || "Server error");
       setPopupType("error");
       setShowPopupMessage(true);
-
-      setTimeout(() => {
-        setShowPopupMessage(false);
-      }, 3000);
+      setTimeout(() => setShowPopupMessage(false), 3000);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-md overflow-y-auto h-screen">
-      <h2 className="text-2xl font-bold mb-6">Employee Onboarding</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        {Object.keys(employeeData).map((key) => (
-          <div key={key} className="flex flex-col">
-            <label className="text-gray-700 capitalize">
-              {key.replace("_", " ")}
-            </label>
-            <input
-              type={key === "date_of_birth" ? "date" : "text"}
-              name={key}
-              value={employeeData[key]}
-              onChange={handleChange}
-              className="border p-2 rounded w-full"
-            />
-            {errors[key] && (
-              <p className="text-red-500 text-sm">{errors[key]}</p>
-            )}
-          </div>
-        ))}
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
-        >
-          Submit
-        </button>
-      </form>
-
-      {/* Popup Message */}
-      {showPopupMessage && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded shadow-lg w-1/3 relative">
-            {/* Close Button */}
-            <button
-              onClick={() => setShowPopupMessage(false)}
-              className="absolute top-2 right-2 text-gray-500 text-xl"
-            >
-              &times;
-            </button>
-
-            {/* Header */}
-            <h2
-              className={`text-center text-xl font-bold mb-4 ${
-                popupType === "error" ? "text-red-500" : "text-green-500"
-              }`}
-            >
-              {popupType === "error" ? "Error" : "Success"}
-            </h2>
-
-            {/* Message */}
-            <p className="text-center mb-4">{popupMessage}</p>
-
-            {/* Close Button */}
-            <div className="flex justify-center">
-              <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-                onClick={() => setShowPopupMessage(false)}
-              >
-                Close
-              </button>
-            </div>
-          </div>
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-gray-100 overflow-hidden">
+      {/* Left Panel */}
+      <div className="bg-gradient-to-b from-blue-600 to-blue-400 flex flex-col items-center justify-center p-10 text-white">
+        <div className="bg-white rounded-full w-20 h-20 flex items-center justify-center mb-4">
+          <span className="text-blue-600 text-3xl">🚀</span>
         </div>
-      )}
+        <h2 className="text-2xl font-bold">Welcome to Wellbeing 360</h2>
+        <p className="mt-2 text-sm text-center max-w-xs">
+          A unified platform for health records, appointments, and more.
+        </p>
+      </div>
+
+      {/* Right Panel */}
+      <div className="bg-white p-4 md:p-12 overflow-y-auto max-h-screen">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-2xl font-bold text-gray-700 mb-6 text-center">
+            Employee Onboarding
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-6 pb-10">
+            {Object.entries(employeeData).map(([key, value]) => (
+              <div key={key}>
+                <label className="block text-gray-600 mb-1 capitalize">
+                  {key.replace(/_/g, " ")}
+                </label>
+                {key === "active_status" ? (
+                  <input
+                    type="checkbox"
+                    name={key}
+                    checked={value}
+                    onChange={handleChange}
+                    className="w-5 h-5"
+                  />
+                ) : (
+                  <input
+                    type={key === "date_of_birth" ? "date" : "text"}
+                    name={key}
+                    value={value}
+                    onChange={handleChange}
+                    placeholder={`Enter ${key.replace(/_/g, " ")}`}
+                    className="w-full border-b border-blue-300 focus:outline-none focus:border-blue-600 p-2 placeholder-gray-400"
+                  />
+                )}
+                {errors[key] && (
+                  <p className="text-sm text-red-500 mt-1">{errors[key]}</p>
+                )}
+              </div>
+            ))}
+
+            <button
+              type="submit"
+              className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg w-full transition font-semibold mt-4"
+            >
+              Submit
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {/* Toast */}
+      <AnimatePresence>
+        {showPopupMessage && (
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            className={`fixed top-6 right-6 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 z-50 text-white ${
+              popupType === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            <FaCheckCircle className="text-xl" />
+            <span>{popupMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

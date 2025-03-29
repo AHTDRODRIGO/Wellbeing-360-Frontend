@@ -7,7 +7,6 @@ import { IoSettings } from "react-icons/io5";
 import { TfiMoney } from "react-icons/tfi";
 
 const sidebarData = [
-
   {
     _id: "1",
     name: "Dashboard",
@@ -15,12 +14,12 @@ const sidebarData = [
     url: "/emp-dashboard",
   },
 
-  // {
-  //   _id: "1",
-  //   name: "Employee Management",
-  //   icon: <MdDashboard />,
-  //   url: "/emp-management",
-  // },
+  {
+    _id: "1",
+    name: "Employee Management",
+    icon: <MdDashboard />,
+    url: "/emp-management",
+  },
 
   // {
   //   _id: "2",
@@ -83,7 +82,6 @@ const sidebarData = [
   //       name: "Leave Request",
   //       url: "/leave-request",
   //     },
-
 
   //   ],
   // },
@@ -182,20 +180,21 @@ const sidebarData = [
   //       name: "Job Posting & Management",
   //       url: "/job-posting-management",
   //     },
-     
+
   //   ],
   // },
-  // {
-  //   _id: "7",
-  //   name: "Checkpoints Management",
-  //   icon: <MdDashboard />,
-  //   url: "/Checkpoint",
-  // },{
-  //   _id: "8",
-  //   name: "Client Management",
-  //   icon: <MdDashboard />,
-  //   url: "/client-management",
-  // },
+  {
+    _id: "7",
+    name: "Checkpoints Management",
+    icon: <MdDashboard />,
+    url: "/Checkpoint",
+  },
+  {
+    _id: "8",
+    name: "Client Management",
+    icon: <MdDashboard />,
+    url: "/client-management",
+  },
 ];
 
 export default sidebarData;

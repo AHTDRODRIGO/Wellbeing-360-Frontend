@@ -332,52 +332,59 @@ const Dashboard = () => {
           </div>
 
           <div>
-          {activeTab === "leaves" && (
-  appointments.length > 0 ? (
-    <div className="grid grid-cols-1 gap-3 mt-4">
-      {appointments.map((appointment) => (
-        <div
-          key={appointment.appointment_id}
-          className="border rounded-lg p-3 shadow-sm bg-white hover:shadow-md transition duration-300"
-        >
-          <div className="grid grid-cols-2 gap-2">
-            {/* Left Side */}
-            <div className="space-y-1">
-              <p className="text-sm font-semibold text-blue-600">{appointment.employee_name}</p>
-              <p className="text-xs text-gray-600">
-                <span className="font-medium">Doctor:</span> {appointment.doctor_name}
-              </p>
-              <p className="text-xs text-gray-600">
-                <span className="font-medium">Specialization:</span> {appointment.specialization}
-              </p>
-            </div>
+            {activeTab === "leaves" &&
+              (appointments.length > 0 ? (
+                <div className="grid grid-cols-1 gap-3 mt-4">
+                  {appointments.map((appointment) => (
+                    <div
+                      key={appointment.appointment_id}
+                      className="border rounded-lg p-3  bg-white hover:shadow-md transition duration-300"
+                    >
+                      <div className="grid grid-cols-2 gap-2">
+                        {/* Left Side */}
+                        <div className="space-y-1">
+                          <p className="text-sm font-semibold text-blue-600">
+                            {appointment.employee_name}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            <span className="font-medium">Doctor:</span>{" "}
+                            {appointment.doctor_name}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            <span className="font-medium">Specialization:</span>{" "}
+                            {appointment.specialization}
+                          </p>
+                        </div>
 
-            {/* Right Side */}
-            <div className="text-right space-y-1">
-              <span className={`text-xs px-2 py-[2px] rounded-full font-semibold 
-                ${appointment.appointment_status === "confirmed"
-                  ? "bg-green-100 text-green-700"
-                  : "bg-yellow-100 text-yellow-700"
+                        {/* Right Side */}
+                        <div className="text-right space-y-1">
+                          <span
+                            className={`text-xs px-2 py-[2px] rounded-full font-semibold 
+                ${
+                  appointment.appointment_status === "confirmed"
+                    ? "bg-green-100 text-green-700"
+                    : "bg-yellow-100 text-yellow-700"
                 }`}
-              >
-                {appointment.appointment_status}
-              </span>
-              <p className="text-xs text-gray-600">
-                <span className="font-medium">Date:</span> {appointment.appointment_date}
-              </p>
-              <p className="text-xs text-gray-600">
-                <span className="font-medium">Time:</span> {appointment.start_time} - {appointment.end_time}
-              </p>
-            </div>
-          </div>
-        </div>
-      ))}
-    </div>
-  ) : (
-    <p className="text-sm text-gray-500 ">No upcoming appointments.</p>
-  )
-)}
-
+                          >
+                            {appointment.appointment_status}
+                          </span>
+                          <p className="text-xs text-gray-600">
+                            <span className="font-medium">Date:</span>{" "}
+                            {appointment.appointment_date}
+                          </p>
+                          <p className="text-xs text-gray-600">
+                            <span className="font-medium">Time:</span>{" "}
+                            {appointment.start_time} - {appointment.end_time}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 ">
+                </p>
+              ))}
 
             {activeTab === "leaves" && (
               <ul>
