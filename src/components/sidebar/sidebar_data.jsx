@@ -183,17 +183,18 @@ const sidebarData = [
 
   //   ],
   // },
-  {
-    _id: "7",
-    name: "Checkpoints Management",
-    icon: <MdDashboard />,
-    url: "/Checkpoint",
-  },
+
   {
     _id: "8",
-    name: "Client Management",
+    name: "Doctors Management",
     icon: <MdDashboard />,
-    url: "/client-management",
+    url: "/Doctors-management",
+  },
+  {
+    _id: "7",
+    name: "Appoinment Management",
+    icon: <MdDashboard />,
+    url: "/Appoinment",
   },
 ];
 

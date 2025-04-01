@@ -22,12 +22,12 @@ import Emp_Dashboard from "./components/Wellbeing-360/emp_management/dashboard/d
 import Emp_details from "./components/Wellbeing-360/emp_management/view_emp_details/emp_details.jsx";
 import Onboard_new from "./components/Wellbeing-360/emp_management/employee_quick_onboard/onboard_new.jsx";
 import Emp_Management from "./components/Wellbeing-360/emp_management/emp_management/emp_management.jsx";
-import Checkpoint_management from "./components/Wellbeing-360/checkpoint-managment/add-and-view/checkpoint-management.jsx";
-import Client from "./components/Wellbeing-360/client-managment/create-client.jsx";
-import Check_point_by_client from "./components/Wellbeing-360/checkpoint-managment/add-and-view/check-point-by-client.jsx";
-import Checkpoint from "./components/Wellbeing-360/checkpoint-managment/checkpoint.jsx";
-import Check_point_by_client_02 from "./components/Wellbeing-360/checkpoint-managment/history/check-point-by-client-02.jsx";
-import Checkpoint_history from "./components/Wellbeing-360/checkpoint-managment/history/check-point-history.jsx";
+import Checkpoint_management from "./components/Wellbeing-360/doctors-managment/add-and-view/checkpoint-management.jsx";
+import Client from "./components/Wellbeing-360/add-doctors/add.jsx"; 
+import Check_point_by_client from "./components/Wellbeing-360/doctors-managment/add-and-view/check-point-by-client.jsx";
+import Checkpoint from "./components/Wellbeing-360/doctors-managment/doctors.jsx";
+import Check_point_by_client_02 from "./components/Wellbeing-360/doctors-managment/history/check-point-by-client-02.jsx";
+import Checkpoint_history from "./components/Wellbeing-360/doctors-managment/history/check-point-history.jsx";
 
 const AppContent = ({
   isSidebarOpen,
@@ -115,10 +115,10 @@ const AppContent = ({
         <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home />} />
         <Route path="/emp-management" element={<Emp_Management />} />
-        <Route path="/Checkpoint-management" element={<Checkpoint_management/>} />
-        <Route path="/client-management" element={<Client/>} />
+        <Route path="/Appoinment-management" element={<Checkpoint_management/>} />
+        <Route path="/Doctors-management" element={<Client/>} />
         <Route path="/check_point_by_client" element={<Check_point_by_client/>} />
-        <Route path="/Checkpoint" element={<Checkpoint/>} />
+        <Route path="/Appoinment" element={<Checkpoint/>} />
         <Route path="/check_point_by_client_02" element={<Check_point_by_client_02/>} />
         <Route path="/Checkpoint-history" element={<Checkpoint_history/>} />
         <Route path="/emp-dashboard" element={<Emp_Dashboard />} />

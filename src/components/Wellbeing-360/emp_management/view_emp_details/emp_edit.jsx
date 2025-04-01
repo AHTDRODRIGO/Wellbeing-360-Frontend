@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 const EmployeeEdit = ({ employeeNo, onClose }) => {
-  const API_URL = process.env.REACT_APP_BACKEND_URL;
   const [employeeData, setEmployeeData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -12,47 +11,46 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
   useEffect(() => {
     const fetchEmployee = async () => {
       setLoading(true);
-      setError(null);
       try {
-        console.log(`Fetching employee data for: ${employeeNo}`);
         const response = await fetch(
           `http://localhost:8599/v1/wellbeing360/employees/employee?employee_no=${employeeNo}`
         );
-        if (!response.ok) throw new Error("Failed to fetch employee data");
+        const result = await response.json();
 
-        const data = await response.json();
-        console.log("API Response:", data);
-
-        if (data && data.employee) {
-          setEmployeeData(data.employee);
+        if (response.ok && result?.employee) {
+          setEmployeeData(result.employee);
         } else {
-          setError("Employee data not found.");
+          throw new Error("Employee data not found.");
         }
       } catch (err) {
-        console.error("Error fetching employee:", err);
-        setError("Error fetching employee data. Please try again.");
+        console.error(err);
+        setError("Failed to fetch employee data. Please try again.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchEmployee();
-  }, [employeeNo, API_URL]);
+  }, [employeeNo]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setEmployeeData((prevData) => ({
-      ...prevData,
-      [name]: name === "active_status" ? value === "true" : value, // Ensure correct boolean type for active_status
+    const { name, value, type } = e.target;
+    setEmployeeData((prev) => ({
+      ...prev,
+      [name]:
+        type === "number"
+          ? parseInt(value)
+          : name === "active_status"
+          ? value === "true"
+          : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Updating employee data:", employeeData);
       const response = await fetch(
-        `http://localhost:8599/v1/81guards/employees/employee?employee_no=${employeeNo}`,
+        `http://localhost:8599/v1/wellbeing360/employees/employee?employee_no=${employeeNo}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -63,19 +61,17 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
       if (response.ok) {
         setPopupMessage("Employee updated successfully!");
         setPopupType("success");
-        setShowPopup(true);
-
-        setTimeout(() => {
-          setShowPopup(false);
-          onClose();
-        }, 3000);
       } else {
         setPopupMessage("Failed to update employee.");
         setPopupType("error");
-        setShowPopup(true);
       }
-    } catch (error) {
-      console.error("Error updating employee:", error);
+      setShowPopup(true);
+      setTimeout(() => {
+        setShowPopup(false);
+        if (popupType === "success") onClose();
+      }, 2500);
+    } catch (err) {
+      console.error(err);
       setPopupMessage("Error updating employee.");
       setPopupType("error");
       setShowPopup(true);
@@ -83,9 +79,9 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-md w-[500px] relative">
-        <h2 className="text-lg font-bold mb-4">Edit Employee</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+      <div className="bg-white rounded-lg shadow-md w-full max-w-2xl p-6 overflow-y-auto max-h-[90vh]">
+        <h2 className="text-xl font-semibold mb-4">Edit Employee</h2>
 
         {loading ? (
           <p>Loading...</p>
@@ -94,127 +90,76 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
             {error}
             <button
               onClick={() => window.location.reload()}
-              className="ml-2 bg-gray-500 text-white px-2 py-1 rounded"
+              className="ml-2 bg-gray-500 text-white px-3 py-1 rounded"
             >
               Retry
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-gray-700">Name</label>
+          <form
+            onSubmit={handleSubmit}
+            className="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            {/* Fields */}
+            {[
+              "name",
+              "nic",
+              "date_of_birth",
+              "contact_number",
+              "weight",
+              "height",
+              "address",
+              "employee_type",
+              "department",
+              "designation",
+              "work_location",
+            ].map((field) => (
+              <div key={field}>
+                <label className="text-sm text-gray-700 capitalize">
+                  {field.replace(/_/g, " ")}
+                </label>
                 <input
-                  type="text"
-                  name="name"
-                  value={employeeData.name || ""}
+                  type={
+                    ["date_of_birth"].includes(field)
+                      ? "date"
+                      : field === "weight" || field === "height"
+                      ? "number"
+                      : "text"
+                  }
+                  name={field}
+                  value={employeeData[field] || ""}
                   onChange={handleChange}
-                  className="border p-2 w-full rounded"
+                  className="w-full border border-gray-300 rounded px-3 py-2"
                 />
               </div>
+            ))}
 
-              <div>
-                <label className="block text-gray-700">NIC</label>
-                <input
-                  type="text"
-                  name="nic"
-                  value={employeeData.nic || ""}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Date of Birth</label>
-                <input
-                  type="date"
-                  name="date_of_birth"
-                  value={employeeData.date_of_birth || ""}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Contact Number</label>
-                <input
-                  type="text"
-                  name="contact_number"
-                  value={employeeData.contact_number || ""}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                />
-              </div>
-
-              <div className="col-span-2">
-                <label className="block text-gray-700">Address</label>
-                <input
-                  type="text"
-                  name="address"
-                  value={employeeData.address || ""}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Department</label>
-                <input
-                  type="text"
-                  name="department"
-                  value={employeeData.department || ""}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Designation</label>
-                <input
-                  type="text"
-                  name="designation"
-                  value={employeeData.designation || ""}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Work Location</label>
-                <input
-                  type="text"
-                  name="work_location"
-                  value={employeeData.work_location || ""}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-700">Active Status</label>
-                <select
-                  name="active_status"
-                  value={employeeData.active_status ? "true" : "false"}
-                  onChange={handleChange}
-                  className="border p-2 w-full rounded"
-                >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </select>
-              </div>
+            {/* Active Status */}
+            <div>
+              <label className="text-sm text-gray-700">Active Status</label>
+              <select
+                name="active_status"
+                value={employeeData.active_status ? "true" : "false"}
+                onChange={handleChange}
+                className="w-full border border-gray-300 rounded px-3 py-2"
+              >
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
             </div>
 
-            <div className="flex justify-end gap-3 mt-4">
+            {/* Buttons */}
+            <div className="col-span-full flex justify-end gap-3 mt-4">
               <button
                 type="button"
                 onClick={onClose}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-blue-300 text-black px-4 py-2 rounded"
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
               >
                 Update
               </button>
@@ -222,27 +167,20 @@ const EmployeeEdit = ({ employeeNo, onClose }) => {
           </form>
         )}
 
-        {/* Popup Message */}
+        {/* Popup */}
         {showPopup && (
-          <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounded shadow-lg w-1/3 relative">
-              <h2
-                className={`text-center text-xl font-bold mb-4 ${
-                  popupType === "error" ? "text-red-500" : "text-green-500"
-                }`}
-              >
-                {popupType === "error" ? "Error" : "Success"}
-              </h2>
-              <p className="text-center mb-4">{popupMessage}</p>
-              <div className="flex justify-center">
-                <button
-                  className="px-4 py-2 bg-blue-300 text-black rounded hover:bg-blue-600"
-                  onClick={() => setShowPopup(false)}
-                >
-                  Close
-                </button>
-              </div>
-            </div>
+          <div
+            className="fixed top-6 right-6 z-50 bg-white border-l-4 px-4 py-3 rounded shadow-lg w-80
+            flex items-start gap-3 animate-fadeIn border-green-500"
+          >
+            <span
+              className={`text-lg font-semibold ${
+                popupType === "success" ? "text-green-600" : "text-red-600"
+              }`}
+            >
+              {popupType === "success" ? "Success" : "Error"}
+            </span>
+            <p className="text-sm text-gray-700 flex-1">{popupMessage}</p>
           </div>
         )}
       </div>
