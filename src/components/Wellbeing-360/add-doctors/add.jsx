@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaStar, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from "react-datepicker";
 
 const DoctorManagement = () => {
   const [doctors, setDoctors] = useState([]);
@@ -8,9 +10,15 @@ const DoctorManagement = () => {
   const [specialization, setSpecialization] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage] = useState(6);
-
+  const [scheduleModalOpen, setScheduleModalOpen] = useState(false);
+  const [selectedDoctorId, setSelectedDoctorId] = useState("");
+  const [schedules, setSchedules] = useState([
+    { date: "", start_time: "", end_time: "", max_patients: "" },
+  ]);
   const [modalOpen, setModalOpen] = useState(false);
   const [editDoctor, setEditDoctor] = useState(null);
+  const [expandedSchedule, setExpandedSchedule] = useState(0); // default open first block
+
   const [formData, setFormData] = useState({
     doctor_id: "",
     name: "",
@@ -105,12 +113,66 @@ const DoctorManagement = () => {
   const totalPages = Math.ceil(filteredDoctors.length / rowsPerPage);
 
   const allSpecializations = [...new Set(doctors.map((d) => d.specialization))];
+  const updateSchedule = (index, field, value) => {
+    setSchedules((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  };
+  const formattedSchedules = schedules.map((sch) => ({
+    date: `${sch.year}-${String(sch.month).padStart(2, "0")}-${String(
+      sch.day
+    ).padStart(2, "0")}`,
+    start_time: sch.start_time,
+    end_time: sch.end_time,
+    max_patients: Number(sch.max_patients),
+  }));
+  const submitSchedule = async () => {
+    try {
+      const formatted = schedules.map((sch) => ({
+        date: `${sch.year}-${String(sch.month).padStart(2, "0")}-${String(
+          sch.day
+        ).padStart(2, "0")}`,
+        start_time: sch.start_time,
+        end_time: sch.end_time,
+        max_patients: Number(sch.max_patients),
+      }));
+
+      const res = await fetch(`${API_BASE}/add-doctor-schedule`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          doctor_id: selectedDoctorId,
+          schedules: formatted,
+        }),
+      });
+
+      if (res.ok) {
+        setPopupType("success");
+        setPopupMessage("Schedule submitted successfully!");
+        setShowPopup(true);
+        setScheduleModalOpen(false);
+      } else {
+        setPopupType("error");
+        setPopupMessage("Something went wrong while submitting!");
+        setShowPopup(true);
+      }
+    } catch (error) {
+      console.error("Error submitting schedule:", error);
+      alert("Something went wrong while submitting.");
+    }
+  };
+  const [showPopup, setShowPopup] = useState(false);
+  const [popupType, setPopupType] = useState("success"); // "success" or "error"
+  const [popupMessage, setPopupMessage] = useState("");
 
   return (
     <div className="p-6">
+      {/* Header + Filters */}
       <div className="flex flex-wrap justify-between mb-6 gap-2">
         <h2 className="text-2xl font-bold">Doctors Management</h2>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <input
             type="text"
             placeholder="Search by name"
@@ -140,46 +202,71 @@ const DoctorManagement = () => {
       </div>
 
       {/* Doctor Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {currentDoctors.map((doctor) => (
           <div
             key={doctor.doctor_id}
-            className="bg-white rounded-lg shadow p-4 text-center relative"
+            className="bg-white rounded-2xl shadow-lg p-6 relative transition-transform hover:scale-[1.02] duration-300"
           >
-            <img
-              src={`https://api.dicebear.com/7.x/personas/svg?seed=${doctor.name}`}
-              alt="doctor"
-              className="w-16 h-16 mx-auto rounded-full mb-3"
-            />
-            <h3 className="font-semibold">{doctor.name}</h3>
-            <p className="text-sm text-gray-500">{doctor.specialization}</p>
-            <div className="text-green-500 flex justify-center my-2">
+            {/* Top Right Buttons */}
+            <div className="absolute top-4 right-4 flex gap-3 text-lg">
+              <button
+                onClick={() => handleEdit(doctor)}
+                className="text-blue-500 hover:text-blue-700"
+              >
+                <FaEdit />
+              </button>
+              <button
+                onClick={() => handleDelete(doctor.doctor_id)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <FaTrash />
+              </button>
+            </div>
+
+            {/* Profile */}
+            <div className="flex items-center gap-4">
+              <img
+                src={`https://api.dicebear.com/7.x/personas/svg?seed=${doctor.name}`}
+                alt="doctor"
+                className="w-16 h-16 rounded-full object-cover border"
+              />
+              <div className="text-left">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {doctor.name}
+                </h3>
+                <p className="text-sm text-gray-500">{doctor.specialization}</p>
+                <p className="text-sm text-gray-400">{doctor.work_location}</p>
+              </div>
+            </div>
+
+            {/* Rating */}
+            <div className="flex justify-start items-center gap-1 text-green-500 mt-4">
               {Array(5)
                 .fill(0)
                 .map((_, i) => (
                   <FaStar key={i} />
                 ))}
             </div>
-            <p className="text-sm text-gray-500">{doctor.work_location}</p>
-            <div className="flex justify-center mt-4 gap-2">
-              <button
-                onClick={() => handleEdit(doctor)}
-                className="text-blue-500 hover:underline"
-              >
-                <FaEdit />
-              </button>
-              <button
-                onClick={() => handleDelete(doctor.doctor_id)}
-                className="text-red-500 hover:underline"
-              >
-                <FaTrash />
-              </button>
-            </div>
+
+            {/* Schedule Button */}
+            <button
+              onClick={() => {
+                setSelectedDoctorId(doctor.doctor_id);
+                setSchedules([
+                  { date: "", start_time: "", end_time: "", max_patients: "" },
+                ]);
+                setScheduleModalOpen(true);
+              }}
+              className="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 rounded-xl transition duration-300"
+            >
+              Schedule Appointment
+            </button>
           </div>
         ))}
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       <div className="flex justify-center items-center mt-6 gap-2">
         <button
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
@@ -207,6 +294,256 @@ const DoctorManagement = () => {
           Next
         </button>
       </div>
+      {scheduleModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+          <div className="bg-gray-50 p-6 rounded shadow-lg w-[650px] max-w-full space-y-4 overflow-y-auto max-h-[90vh]">
+            <div className="flex justify-center">
+              <h2 className="text-lg font-semibold text-gray-800">
+                Schedule Appointments
+              </h2>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                submitSchedule();
+              }}
+              className="space-y-4"
+            >
+              {schedules.map((sch, idx) => {
+                const isOpen = expandedSchedule === idx;
+                const displayDate =
+                  sch.day && sch.month && sch.year
+                    ? `${sch.year}-${String(sch.month).padStart(
+                        2,
+                        "0"
+                      )}-${String(sch.day).padStart(2, "0")}`
+                    : "No date selected";
+
+                return (
+                  <div
+                    key={idx}
+                    className="border bg-white rounded-md shadow-sm"
+                  >
+                    {/* Header */}
+                    <div
+                      className="flex justify-between items-center px-4 py-2 cursor-pointer"
+                      onClick={() => setExpandedSchedule(isOpen ? null : idx)}
+                    >
+                      <h3 className="font-medium text-gray-700">
+                        Schedule Day {String(idx + 1).padStart(2, "0")}
+                      </h3>
+                      <div className="flex items-center gap-2">
+                        <p className="text-sm text-gray-500">
+                          {displayDate} | {sch.start_time || "--:--"} -{" "}
+                          {sch.end_time || "--:--"}
+                        </p>
+                        {schedules.length > 1 && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSchedules((prev) =>
+                                prev.filter((_, i) => i !== idx)
+                              );
+                            }}
+                            className="text-red-500 hover:text-red-700 text-xl"
+                            title="Remove schedule"
+                          >
+                            &times;
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Expanded Section */}
+                    {isOpen && (
+                      <div className="px-4 pb-4 space-y-4">
+                        {/* Date */}
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Select Date
+                          </label>
+                          <div className="grid grid-cols-3 gap-2">
+                            <select
+                              value={sch.day || ""}
+                              onChange={(e) =>
+                                updateSchedule(idx, "day", e.target.value)
+                              }
+                              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-purple-500"
+                              required
+                            >
+                              <option value="">Day</option>
+                              {[...Array(31)].map((_, i) => (
+                                <option key={i} value={i + 1}>
+                                  {i + 1}
+                                </option>
+                              ))}
+                            </select>
+                            <select
+                              value={sch.month || ""}
+                              onChange={(e) =>
+                                updateSchedule(idx, "month", e.target.value)
+                              }
+                              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-purple-500"
+                              required
+                            >
+                              <option value="">Month</option>
+                              {[
+                                "January",
+                                "February",
+                                "March",
+                                "April",
+                                "May",
+                                "June",
+                                "July",
+                                "August",
+                                "September",
+                                "October",
+                                "November",
+                                "December",
+                              ].map((month, i) => (
+                                <option key={i} value={i + 1}>
+                                  {month}
+                                </option>
+                              ))}
+                            </select>
+                            <select
+                              value={sch.year || ""}
+                              onChange={(e) =>
+                                updateSchedule(idx, "year", e.target.value)
+                              }
+                              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-purple-500"
+                              required
+                            >
+                              <option value="">Year</option>
+                              {Array.from(
+                                { length: 5 },
+                                (_, i) => 2025 + i
+                              ).map((y) => (
+                                <option key={y} value={y}>
+                                  {y}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* Time */}
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Start Time & End Time
+                          </label>
+                          <div className="grid grid-cols-2 gap-2">
+                            <input
+                              type="time"
+                              value={sch.start_time || ""}
+                              onChange={(e) =>
+                                updateSchedule(
+                                  idx,
+                                  "start_time",
+                                  e.target.value
+                                )
+                              }
+                              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-purple-500"
+                              required
+                            />
+                            <input
+                              type="time"
+                              value={sch.end_time || ""}
+                              onChange={(e) =>
+                                updateSchedule(idx, "end_time", e.target.value)
+                              }
+                              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-purple-500"
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        {/* Max Patients */}
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Max Patients
+                          </label>
+                          <input
+                            type="number"
+                            value={sch.max_patients || ""}
+                            onChange={(e) =>
+                              updateSchedule(
+                                idx,
+                                "max_patients",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Enter max patients"
+                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-purple-500"
+                            required
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+
+              {/* Add More */}
+              <button
+                type="button"
+                className="bg-blue-100 text-blue-800 px-4 py-2 rounded text-sm"
+                onClick={() =>
+                  setSchedules((prev) => [
+                    ...prev,
+                    {
+                      day: "",
+                      month: "",
+                      year: "",
+                      start_time: "",
+                      end_time: "",
+                      max_patients: "",
+                    },
+                  ])
+                }
+              >
+                + Add More
+              </button>
+
+              {/* Submit / Cancel */}
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setScheduleModalOpen(false)}
+                  className="bg-gray-300 px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                >
+                  Submit Schedule
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {showPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+          <div
+            className={`p-6 rounded-lg shadow-lg text-white ${
+              popupType === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            <h3 className="text-lg font-semibold">{popupMessage}</h3>
+            <button
+              onClick={() => setShowPopup(false)}
+              className="mt-4 bg-white text-sm text-gray-800 px-4 py-2 rounded hover:bg-gray-100 transition"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {modalOpen && (
