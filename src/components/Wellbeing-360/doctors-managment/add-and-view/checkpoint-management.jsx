@@ -12,6 +12,12 @@ const DoctorSchedule = () => {
   const [specialtyFilter, setSpecialtyFilter] = useState("");
   const [doctors, setDoctors] = useState([]);
   const [doctorSchedules, setDoctorSchedules] = useState({});
+  const [employeeSearch, setEmployeeSearch] = useState("");
+  const [employeeSuggestions, setEmployeeSuggestions] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     fetchDoctorsByDate(searchDate);
@@ -44,8 +50,44 @@ const DoctorSchedule = () => {
     }
   };
 
-  const specialties = [...new Set(doctors.map((doc) => doc.specialization))];
+  const fetchEmployeeSuggestions = async (query) => {
+    const res = await fetch(
+      "http://localhost:8599/v1/wellbeing360/employees/get-all"
+    );
+    const data = await res.json();
+    const filtered = data.employees.filter((emp) =>
+      emp.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setEmployeeSuggestions(filtered);
+  };
 
+  const handleAppointment = async () => {
+    if (!selectedEmployee) return alert("Please select an employee");
+
+    const res = await fetch(
+      "http://localhost:8599/v1/wellbeing360/appointment/book-appointment",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          employee_no: selectedEmployee.employee_no,
+          doctor_id: selectedDoctor.doctor_id,
+          schedule_id: selectedSchedule.schedule_id,
+        }),
+      }
+    );
+
+    if (res.ok) {
+      setSuccessMessage("Appointment successfully created!");
+      setShowModal(false);
+      setSelectedEmployee(null);
+      setEmployeeSearch("");
+    } else {
+      alert("Failed to book appointment");
+    }
+  };
+
+  const specialties = [...new Set(doctors.map((doc) => doc.specialization))];
   const filteredDoctors = doctors.filter((doc) => {
     const matchesName = doc.name
       .toLowerCase()
@@ -115,9 +157,8 @@ const DoctorSchedule = () => {
                 const alreadySelected =
                   selectedDoctor?.doctor_id === doc.doctor_id;
                 setSelectedDoctor(alreadySelected ? null : doc);
-                if (!alreadySelected && !doctorSchedules[doc.doctor_id]) {
+                if (!alreadySelected && !doctorSchedules[doc.doctor_id])
                   fetchDoctorSchedule(doc.doctor_id);
-                }
               }}
             >
               <img
@@ -149,15 +190,15 @@ const DoctorSchedule = () => {
                 >
                   <h4 className="font-semibold mb-2">Upcoming Schedules</h4>
                   {doctorSchedules[doc.doctor_id]?.length > 0 ? (
-                    <div className=" ">
-                      {doctorSchedules[doc.doctor_id]?.map((sched, idx) => (
+                    <div>
+                      {doctorSchedules[doc.doctor_id].map((sched, idx) => (
                         <div
                           key={idx}
                           className="bg-blue-200 rounded-xl p-4 mb-4 shadow-md border-l-8 border-blue-900 relative"
                         >
                           <div className="flex items-center gap-2 mb-2">
                             <span className="bg-blue-900 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                              Shedule
+                              Schedule
                             </span>
                             <span className="bg-blue-900 text-white text-xs font-semibold px-3 py-1 rounded-full">
                               {sched.start_time} – {sched.end_time}
@@ -181,12 +222,15 @@ const DoctorSchedule = () => {
                           </div>
                           <div className="absolute right-4 top-4 flex items-center gap-2 text-blue-800">
                             <button
-                              title="Edit"
+                              title="Book"
+                              onClick={() => {
+                                setSelectedSchedule(sched);
+                                setShowModal(true);
+                              }}
                               className="bg-white border border-gray-300 text-xs px-2 py-1 rounded-full hover:bg-gray-100"
                             >
                               Make an Appointment
                             </button>
-
                           </div>
                         </div>
                       ))}
@@ -202,6 +246,72 @@ const DoctorSchedule = () => {
           </div>
         ))}
       </div>
+
+      {/* Modal for Appointment */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-[450px] max-w-full">
+            <h2 className="text-lg font-bold mb-4">Make Appointment</h2>
+            <input
+              type="text"
+              value={employeeSearch}
+              onChange={(e) => {
+                setEmployeeSearch(e.target.value);
+                fetchEmployeeSuggestions(e.target.value);
+                setSelectedEmployee(null);
+              }}
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-purple-500"
+              placeholder="Type employee name"
+            />
+            {employeeSuggestions.length > 0 && !selectedEmployee && (
+              <ul className="mt-2 border rounded bg-white max-h-40 overflow-y-auto">
+                {employeeSuggestions.map((emp, i) => (
+                  <li
+                    key={i}
+                    onClick={() => {
+                      setEmployeeSearch(emp.name);
+                      setSelectedEmployee(emp);
+                      setEmployeeSuggestions([]);
+                    }}
+                    className="p-2 hover:bg-gray-100 cursor-pointer"
+                  >
+                    {emp.name} - {emp.employee_no}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 bg-gray-300 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAppointment}
+                className="px-4 py-2 bg-green-500 text-white rounded"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Popup */}
+      {successMessage && (
+        <div className="fixed inset-0 flex justify-center items-center z-50">
+          <div className="bg-green-600 text-white px-6 py-4 rounded shadow-lg">
+            <p>{successMessage}</p>
+            <button
+              onClick={() => setSuccessMessage("")}
+              className="ml-4 text-sm underline"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
