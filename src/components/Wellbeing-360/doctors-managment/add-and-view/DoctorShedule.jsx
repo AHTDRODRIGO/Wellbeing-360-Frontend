@@ -18,6 +18,7 @@ const DoctorSchedule = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [selectedDoctorId, setSelectedDoctorId] = useState(null);
 
   useEffect(() => {
     fetchDoctorsByDate(searchDate);
@@ -71,7 +72,7 @@ const DoctorSchedule = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           employee_no: selectedEmployee.employee_no,
-          doctor_id: selectedDoctor.doctor_id,
+          doctor_id: selectedDoctorId,
           schedule_id: selectedSchedule.schedule_id,
         }),
       }
@@ -154,9 +155,8 @@ const DoctorSchedule = () => {
             <div
               className="flex items-center cursor-pointer"
               onClick={() => {
-                const alreadySelected =
-                  selectedDoctor?.doctor_id === doc.doctor_id;
-                setSelectedDoctor(alreadySelected ? null : doc);
+                const alreadySelected = selectedDoctorId === doc.doctor_id;
+                setSelectedDoctorId(alreadySelected ? null : doc.doctor_id);
                 if (!alreadySelected && !doctorSchedules[doc.doctor_id])
                   fetchDoctorSchedule(doc.doctor_id);
               }}
@@ -180,7 +180,7 @@ const DoctorSchedule = () => {
             </div>
 
             <AnimatePresence>
-              {selectedDoctor?.doctor_id === doc.doctor_id && (
+              {selectedDoctorId === doc.doctor_id && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: "auto" }}

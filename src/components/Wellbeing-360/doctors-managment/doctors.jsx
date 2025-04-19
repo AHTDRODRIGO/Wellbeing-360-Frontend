@@ -20,7 +20,7 @@ const Emp_Management = () => {
 
   const cards = [
     {
-      title: "Appoinment Management",
+      title: "Make Appoinments & Bookings ",
       count: data.totalWorkforce,
       label: "Total Employees",
       bgColor: "bg-blue-50",
@@ -29,13 +29,13 @@ const Emp_Management = () => {
       onClick: () => navigate("/Appoinment-management"),
     },
     {
-      title: "Appoinment History",
+      title: "Appoinment Management",
       count: data.totalWorkforce, 
       label: "Total Employees",
       bgColor: "bg-blue-50",
       iconBg: "border-blue-400",
       icon: <TbListDetails className="text-blue-500 text-2xl" />,
-      onClick: () => navigate("/check_point_by_client_02"),
+      onClick: () => navigate("/Appoinment-history"),
     },
   ];
 
