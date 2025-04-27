@@ -46,72 +46,72 @@ const Emp_Management = () => {
        
     ];
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const today = moment().format("YYYY-MM-DD");
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             const today = moment().format("YYYY-MM-DD");
 
-                // Fetch attendance stats
-                const response = await fetch(
-                    `http://localhost:8599/v1/hris/employees/getAttendanceStats`
-                );
-                const result = await response.json();
+    //             // Fetch attendance stats
+    //             const response = await fetch(
+    //                 `http://localhost:8599/v1/hris/employees/getAttendanceStats`
+    //             );
+    //             const result = await response.json();
 
-                if (result.success) {
-                    const { totalWorkforce } = result.data;
-                    setData((prevData) => ({ ...prevData, totalWorkforce }));
-                } else {
-                    console.error(
-                        "Error fetching attendance stats:",
-                        result.error || result
-                    );
-                }
+    //             if (result.success) {
+    //                 const { totalWorkforce } = result.data;
+    //                 setData((prevData) => ({ ...prevData, totalWorkforce }));
+    //             } else {
+    //                 console.error(
+    //                     "Error fetching attendance stats:",
+    //                     result.error || result
+    //                 );
+    //             }
 
-                // Fetch absent workforce count
-                const absentResponse = await fetch(
-                    `http://localhost:8599/v1/hris/attendence/getNotAttendCount?startDate=${today}&endDate=${today}`
-                );
-                const absentResult = await absentResponse.json();
+    //             // Fetch absent workforce count
+    //             const absentResponse = await fetch(
+    //                 `http://localhost:8599/v1/hris/attendence/getNotAttendCount?startDate=${today}&endDate=${today}`
+    //             );
+    //             const absentResult = await absentResponse.json();
 
-                if (absentResult.not_attended_count !== undefined) {
-                    setData((prevData) => ({
-                        ...prevData,
-                        absentWorkforce: absentResult.not_attended_count,
-                    }));
-                } else {
-                    console.error(
-                        "Error fetching absent workforce count:",
-                        absentResult.error || absentResult
-                    );
-                }
+    //             if (absentResult.not_attended_count !== undefined) {
+    //                 setData((prevData) => ({
+    //                     ...prevData,
+    //                     absentWorkforce: absentResult.not_attended_count,
+    //                 }));
+    //             } else {
+    //                 console.error(
+    //                     "Error fetching absent workforce count:",
+    //                     absentResult.error || absentResult
+    //                 );
+    //             }
 
-                // Fetch allowance and deduction counts
-                const adResponse = await fetch(
-                    `http://localhost:8599/v1/hris/payroll/allowances-deductions-count`
-                );
-                const adResult = await adResponse.json();
+    //             // Fetch allowance and deduction counts
+    //             const adResponse = await fetch(
+    //                 `http://localhost:8599/v1/hris/payroll/allowances-deductions-count`
+    //             );
+    //             const adResult = await adResponse.json();
 
-                if (
-                    adResult.allowance_count !== undefined &&
-                    adResult.deduction_count !== undefined
-                ) {
-                    setData((prevData) => ({
-                        ...prevData,
-                        allowanceCount: adResult.allowance_count,
-                        deductionCount: adResult.deduction_count,
-                    }));
-                } else {
-                    console.error(
-                        "Error fetching allowances/deductions count:",
-                        adResult.error || adResult
-                    );
-                }
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        };
-        fetchData();
-    }, [API_URL]);
+    //             if (
+    //                 adResult.allowance_count !== undefined &&
+    //                 adResult.deduction_count !== undefined
+    //             ) {
+    //                 setData((prevData) => ({
+    //                     ...prevData,
+    //                     allowanceCount: adResult.allowance_count,
+    //                     deductionCount: adResult.deduction_count,
+    //                 }));
+    //             } else {
+    //                 console.error(
+    //                     "Error fetching allowances/deductions count:",
+    //                     adResult.error || adResult
+    //                 );
+    //             }
+    //         } catch (error) {
+    //             console.error("Error fetching data:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, [API_URL]);
 
     return (
         <div className="mx-5 mt-5 font-montserrat">

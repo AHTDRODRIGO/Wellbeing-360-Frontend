@@ -196,6 +196,12 @@ const sidebarData = [
     icon: <MdDashboard />,
     url: "/Appoinment",
   },
+  {
+    _id: "8",
+    name: "Inventory Management",
+    icon: <MdDashboard />,
+    url: "/inventory",
+  },
 ];
 
 export default sidebarData;

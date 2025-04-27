@@ -11,7 +11,6 @@ import {
 } from "react-router-dom";
 import Cookies from "js-cookie";
 
-
 import "./App.css";
 // Import components
 import Sidebar from "./components/sidebar/sidebar.jsx";
@@ -23,10 +22,14 @@ import Emp_details from "./components/Wellbeing-360/emp_management/view_emp_deta
 import Onboard_new from "./components/Wellbeing-360/emp_management/employee_quick_onboard/onboard_new.jsx";
 import Emp_Management from "./components/Wellbeing-360/emp_management/emp_management/emp_management.jsx";
 import Doctor_Shedule from "./components/Wellbeing-360/doctors-managment/add-and-view/DoctorShedule.jsx";
-import Client from "./components/Wellbeing-360/add-doctors/add.jsx"; 
+import Appoinmentmanage from "./components/Wellbeing-360/doctors-managment/history/appoinmentmanage.jsx";
+import Inventory from "./components/Wellbeing-360/inventry/inventry.js";
+import AddItem from "./components/Wellbeing-360/inventry/addItems.js";
+import ViewItems from "./components/Wellbeing-360/inventry/viewitems.js";
+
+import Client from "./components/Wellbeing-360/add-doctors/add.jsx";
 import Check_point_by_client from "./components/Wellbeing-360/doctors-managment/add-and-view/check-point-by-client.jsx";
 import Checkpoint from "./components/Wellbeing-360/doctors-managment/doctors.jsx";
-import Appoinmentmanage from "./components/Wellbeing-360/doctors-managment/history/appoinmentmanage.jsx";
 import Checkpoint_history from "./components/Wellbeing-360/doctors-managment/history/check-point-history.jsx";
 
 const AppContent = ({
@@ -93,8 +96,9 @@ const AppContent = ({
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       )}
       <div
-        className={`flex-grow p-5 transition-all duration-300 ${isSidebarOpen && location.pathname !== "/login" ? "ml-64" : "ml-20"
-          }`}
+        className={`flex-grow p-5 transition-all duration-300 ${
+          isSidebarOpen && location.pathname !== "/login" ? "ml-64" : "ml-20"
+        }`}
         style={
           isOnboardNewRoute
             ? { position: "fixed", top: 0, left: 0, right: 0, bottom: 0 }
@@ -110,27 +114,25 @@ const AppContent = ({
           />
         )}
         <Routes>
-        <Route path="/emp-details" element={<Emp_details />} />
-        <Route path="/onboard_new" element={<Onboard_new />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/emp-management" element={<Emp_Management />} />
-        <Route path="/Appoinment-management" element={<Doctor_Shedule/>} />
-        <Route path="/Doctors-management" element={<Client/>} />
-        <Route path="/check_point_by_client" element={<Check_point_by_client/>} />
-        <Route path="/Appoinment" element={<Checkpoint/>} />
-        <Route path="/Appoinment-history" element={<Appoinmentmanage/>} />
-        <Route path="/Checkpoint-history" element={<Checkpoint_history/>} />
-        <Route path="/emp-dashboard" element={<Emp_Dashboard />} />
+          <Route path="/emp-details" element={<Emp_details />} />
+          <Route path="/onboard_new" element={<Onboard_new />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/emp-management" element={<Emp_Management />} />
+          <Route path="/Appoinment-management" element={<Doctor_Shedule />} />
+          <Route path="/Doctors-management" element={<Client />} />
+          <Route
+            path="/check_point_by_client"
+            element={<Check_point_by_client />}
+          />
+          <Route path="/Appoinment" element={<Checkpoint />} />
+          <Route path="/Appoinment-history" element={<Appoinmentmanage />} />
+          <Route path="/Checkpoint-history" element={<Checkpoint_history />} />
+          <Route path="/emp-dashboard" element={<Emp_Dashboard />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/inventory-add-items" element={<AddItem />} />
+          <Route path="/inventory-view-items" element={<ViewItems />} />
 
-          
-          
-          
-          
-          
-          
-          
-          
           {/* <Route path="/leave-info" element={<Leave />} />
           <Route path="/leave-management" element={<Leave_Management />} />
           <Route path="/leave-request" element={<Leave_Request />} />
@@ -239,7 +241,6 @@ function App() {
   };
   return (
     <Router>
-
       <AppContent
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
