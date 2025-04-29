@@ -48,10 +48,6 @@ function Pharmacy() {
     }
   };
 
-  const handleUpdateOrder = (orderId) => {
-    // 🔥 You can replace this with a real API call
-    alert(`Update Order Status for Order #${orderId}`);
-  };
 
   const stepStatus = (status) => {
     switch (status.toLowerCase()) {
@@ -73,7 +69,55 @@ function Pharmacy() {
   const filteredOrders = orders.filter((order) =>
     order.employee_no?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
+  const handleUpdateOrder = async (order) => {
+    try {
+      let nextStatus = "";
+      let body = {};
+  
+      // Determine next status and request body
+      if (order.order_status === "completed") {
+        nextStatus = "delivered";
+        body = { status: nextStatus }; // No payment needed now
+      } else if (order.order_status === "delivered") {
+        nextStatus = "ready_to_pickup";
+        body = { status: nextStatus };
+      } else if (order.order_status === "placed") {
+        nextStatus = "processing";
+        body = { status: nextStatus };
+      } else if (order.order_status === "processing") {
+        nextStatus = "completed";
+        body = { status: nextStatus, payment_method: "online" }; // Payment needed here
+      } else {
+        alert("No further updates available.");
+        return;
+      }
+  
+      const response = await fetch(
+        `http://localhost:8599/v1/wellbeing360/oder/update-order-status/${order.order_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        }
+      );
+  
+      const result = await response.json();
+  
+      if (result.success) {
+        alert(`Order successfully updated to ${nextStatus}`);
+        fetchOrders(); // Refresh orders list
+        setShowOrderModal(false); // Close modal
+      } else {
+        alert("Failed to update order status.");
+      }
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      alert("An error occurred.");
+    }
+  };
+  
   return (
     <div className="p-6 bg-gray-100 min-h-screen font-montserrat">
       {/* Header Icons */}
@@ -298,12 +342,19 @@ function Pharmacy() {
 
               {/* Update Order Status Button */}
               <div className="text-center">
-                <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold text-lg"
-                  onClick={() => handleUpdateOrder(selectedOrder.order_id)}
-                >
-                  Update Order Status
-                </button>
+              <div className="text-center">
+  <button
+    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold text-lg"
+    onClick={() => handleUpdateOrder(selectedOrder)}
+  >
+    {selectedOrder.order_status === "completed"
+      ? "Update Order to Delivered"
+      : selectedOrder.order_status === "delivered"
+      ? "Update Order to Ready to Pickup"
+      : "Update Order Status"}
+  </button>
+</div>
+
               </div>
             </div>
           </motion.div>
