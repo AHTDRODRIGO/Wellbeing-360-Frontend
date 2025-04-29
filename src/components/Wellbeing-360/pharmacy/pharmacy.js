@@ -55,19 +55,21 @@ function Pharmacy() {
 
   const stepStatus = (status) => {
     switch (status.toLowerCase()) {
-      case "processing":
+      case "placed":
         return 0;
-      case "shipped":
+      case "processing":
         return 1;
-      case "en route":
+      case "completed":
         return 2;
-      case "arrived":
+      case "delivered":
         return 3;
+      case "ready_to_pickup":
+        return 4;
       default:
         return 0;
     }
   };
-
+  
   const filteredOrders = orders.filter((order) =>
     order.employee_no?.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -199,7 +201,7 @@ function Pharmacy() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
           >
-            <div className="bg-white rounded-lg p-8 w-[70%] max-w-3xl shadow-xl relative">
+            <div className="bg-white rounded-lg p-8 w-[900px] max-w-3xl shadow-xl relative">
               {/* Close Button */}
               <button
                 className="absolute top-3 right-4 text-gray-400 hover:text-black text-2xl"
@@ -212,45 +214,6 @@ function Pharmacy() {
               <h2 className="text-2xl font-bold mb-6 text-center">
                 Order #{selectedOrder.order_id}
               </h2>
-
-              {/* Stepper Progress */}
-              <div className="flex items-center justify-between mb-10">
-                {["Placed", "Processing", "Completed", "Delivered","Ready to pickup"].map(
-                  (step, index) => (
-                    <div
-                      key={index}
-                      className="flex-1 flex flex-col items-center relative"
-                    >
-                      {/* Line */}
-                      {index !== 0 && (
-                        <div
-                          className={`absolute top-5 left-0 right-0 h-1 ${
-                            stepStatus(selectedOrder.order_status) >= index
-                              ? "bg-purple-500"
-                              : "bg-gray-300"
-                          }`}
-                        ></div>
-                      )}
-                      {/* Step Circle */}
-                      <div
-                        className={`w-10 h-10 rounded-full flex items-center justify-center z-10 ${
-                          stepStatus(selectedOrder.order_status) >= index
-                            ? "bg-purple-600 text-white"
-                            : "bg-gray-300 text-gray-600"
-                        }`}
-                      >
-                        {stepStatus(selectedOrder.order_status) >= index
-                          ? "✓"
-                          : ""}
-                      </div>
-                      {/* Step Label */}
-                      <p className="mt-3 text-sm font-semibold text-center">{`Order ${step}`}</p>
-                    </div>
-                  )
-                )}
-              </div>
-
-              {/* Order Info */}
               <div className="grid grid-cols-2 gap-4 mb-6 text-gray-700">
                 <div>
                   <b>Employee No:</b> {selectedOrder.employee_no}
@@ -268,10 +231,52 @@ function Pharmacy() {
                   <b>Notes:</b> {selectedOrder.notes}
                 </div>
               </div>
+              {/* Stepper Progress */}
+              <div className="flex items-center justify-between mb-10 relative">
+                {[
+                  "Placed",
+                  "Processing",
+                  "Completed",
+                  "Delivered",
+                  "Ready to pickup",
+                ].map((step, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center relative w-1/5"
+                  >
+                    {/* Horizontal Line */}
+                    {index !== 0 && (
+                      <div
+                        className={`absolute top-5 -left-1/2 w-full h-1 ${
+                          stepStatus(selectedOrder.order_status) >= index
+                            ? "bg-purple-500"
+                            : "bg-gray-300"
+                        }`}
+                      ></div>
+                    )}
+
+                    {/* Step Circle */}
+                    <div
+                      className={`w-10 h-10 rounded-full flex items-center justify-center z-10 ${
+                        stepStatus(selectedOrder.order_status) >= index
+                          ? "bg-purple-600 text-white"
+                          : "bg-gray-300 text-gray-600"
+                      }`}
+                    >
+                      {stepStatus(selectedOrder.order_status) >= index
+                        ? "✓"
+                        : ""}
+                    </div>
+
+                    {/* Step Label */}
+                    <p className="mt-3 text-sm font-semibold text-center">{`${step}`}</p>
+                  </div>
+                ))}
+              </div>
 
               {/* Items List */}
               <h3 className="text-lg font-bold mb-3">Ordered Medicines:</h3>
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-2 mb-6 max-h-60 overflow-y-auto pr-2">
                 {selectedOrder.items.map((item) => (
                   <li
                     key={item.item_id}
