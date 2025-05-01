@@ -357,18 +357,14 @@ function Pharmacy() {
               </div>
 
               {/* Stepper */}
+              {/* Stepper */}
               <div className="flex items-center justify-between mb-10 relative">
-                {[
-                  "Placed",
-                  "Processing",
-                  "Completed",
-                  "Delivered",
-                  "Ready to pickup",
-                ].map((step, index) => (
+                {selectedOrder.status_flow.map((step, index) => (
                   <div
                     key={index}
                     className="flex flex-col items-center relative w-1/5"
                   >
+                    {/* Connector Line */}
                     {index !== 0 && (
                       <div
                         className={`absolute top-5 -left-1/2 w-full h-1 ${
@@ -378,6 +374,8 @@ function Pharmacy() {
                         }`}
                       />
                     )}
+
+                    {/* Step Circle */}
                     <div
                       className={`w-10 h-10 rounded-full flex items-center justify-center z-10 ${
                         stepStatus(selectedOrder.order_status) >= index
@@ -389,8 +387,10 @@ function Pharmacy() {
                         ? "✓"
                         : ""}
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-center">
-                      {step}
+
+                    {/* Step Label */}
+                    <p className="mt-3 text-sm font-semibold text-center capitalize">
+                      {step.replace(/_/g, " ")}
                     </p>
                   </div>
                 ))}
