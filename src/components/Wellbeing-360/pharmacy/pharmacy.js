@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import PrivateOrders from "./PrivateOrders";
 import Payments from "./Payments";
+import Statistics from "./Statistics";
 import { FaCheckCircle } from "react-icons/fa";
 
 function Pharmacy() {
@@ -36,8 +37,8 @@ function Pharmacy() {
       //   return <Messages />;
       case "Payments":
         return <Payments />;
-      // case "Statistics":
-      //   return <Statistics />;
+      case "Statistics":
+        return <Statistics />;
       // case "Organization":
       //   return <Organization />;
       default:
