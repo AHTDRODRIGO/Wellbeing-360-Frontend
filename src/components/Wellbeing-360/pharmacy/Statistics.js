@@ -95,7 +95,7 @@ const Statistics = () => {
                 </div>
                 <div>
                   <p className="text-2xl font-bold text-gray-900">
-                    £{stats.total_income}
+                    LKR {stats.total_income}
                   </p>
                   <p className="text-sm text-gray-600">Daily Income</p>
                 </div>

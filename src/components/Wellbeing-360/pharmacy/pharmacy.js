@@ -173,12 +173,12 @@ function Pharmacy() {
             title: "Private Orders",
             component: "PrivateOrders",
           },
-          {
-            icon: <FaCloudUploadAlt />,
-            title: "NHS Uploaded",
-            component: "NHSUploaded",
-          },
-          { icon: <FaComments />, title: "Messages", component: "Messages" },
+          // {
+          //   icon: <FaCloudUploadAlt />,
+          //   title: "NHS Uploaded",
+          //   component: "NHSUploaded",
+          // },
+          // { icon: <FaComments />, title: "Messages", component: "Messages" },
           {
             icon: <FaMoneyCheckAlt />,
             title: "Payments",
@@ -189,11 +189,11 @@ function Pharmacy() {
             title: "Statistics",
             component: "Statistics",
           },
-          {
-            icon: <FaBuilding />,
-            title: "Organization",
-            component: "Organization",
-          },
+          // {
+          //   icon: <FaBuilding />,
+          //   title: "Organization",
+          //   component: "Organization",
+          // },
         ].map((item, idx) => (
           <div
             key={idx}
