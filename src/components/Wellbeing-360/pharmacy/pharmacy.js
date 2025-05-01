@@ -10,8 +10,7 @@ import {
 } from "react-icons/fa";
 import PrivateOrders from "./PrivateOrders";
 import Payments from "./Payments";
-
-
+import { FaCheckCircle } from "react-icons/fa";
 
 function Pharmacy() {
   const [orders, setOrders] = useState([]);
@@ -20,6 +19,9 @@ function Pharmacy() {
   const [showOrderModal, setShowOrderModal] = useState(false);
   const [activeStatus, setActiveStatus] = useState("All");
   const [activeView, setActiveView] = useState(null);
+  const [showPopupMessage, setShowPopupMessage] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("success"); // or "error"
 
   useEffect(() => {
     fetchOrders();
@@ -42,7 +44,7 @@ function Pharmacy() {
         return null;
     }
   };
-  
+
   const fetchOrders = async () => {
     try {
       const response = await fetch(
@@ -102,28 +104,19 @@ function Pharmacy() {
 
   const handleUpdateOrder = async (order) => {
     try {
-      let nextStatus = "";
-      let body = {};
-
-      if (order.order_status === "completed") {
-        nextStatus = "delivered";
-        body = { status: nextStatus };
-      } else if (order.order_status === "delivered") {
-        nextStatus = "ready_to_pickup";
-        body = { status: nextStatus };
-      } else if (order.order_status === "placed") {
-        nextStatus = "processing";
-        body = { status: nextStatus };
-      } else if (order.order_status === "processing") {
-        nextStatus = "completed";
-        body = { status: nextStatus, payment_method: "online" };
-      } else {
-        alert("No further updates available.");
+      const { next } = getNextOrderStatus(order.order_status);
+      if (!next) {
+        alert("This order cannot be updated further.");
         return;
       }
 
+      const body =
+        next === "completed"
+          ? { status: next, payment_method: "online" }
+          : { status: next };
+
       const response = await fetch(
-        `http://localhost:8599/v1/wellbeing360/oder/update-order-status/${order.order_id}`,
+        `http://localhost:8599/v1/wellbeing360/oder/status/${order.order_id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -133,11 +126,17 @@ function Pharmacy() {
 
       const result = await response.json();
       if (result.success) {
-        alert(`Order successfully updated to ${nextStatus}`);
-        fetchOrders();
+        setPopupType("success");
+        setPopupMessage(`Order successfully updated to ${next}`);
+        setShowPopupMessage(true);
+        setTimeout(() => setShowPopupMessage(false), 3000);
         setShowOrderModal(false);
       } else {
-        alert("Failed to update order status.");
+        setPopupType("error");
+        setPopupMessage("Failed to update order status.");
+        setShowPopupMessage(true);
+
+        setTimeout(() => setShowPopupMessage(false), 3000);
       }
     } catch (error) {
       console.error("Error updating order status:", error);
@@ -145,7 +144,23 @@ function Pharmacy() {
     }
   };
 
-
+  const getNextOrderStatus = (status) => {
+    switch (status.toLowerCase()) {
+      case "placed":
+        return { next: "processing", label: "Update Order to Processing" };
+      case "processing":
+        return { next: "completed", label: "Update Order to Completed" };
+      case "completed":
+        return { next: "delivered", label: "Update Order to Delivered" };
+      case "delivered":
+        return {
+          next: "ready_to_pickup",
+          label: "Update Order to Ready to Pickup",
+        };
+      default:
+        return { next: null, label: "No Further Action" };
+    }
+  };
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen font-montserrat">
@@ -253,9 +268,9 @@ function Pharmacy() {
                 <tr>
                   <th className="p-4">Customer Info</th>
                   <th className="p-4">Order Info</th>
-                  <th className="p-4">Product</th>
-                  <th className="p-4">Timeline</th>
-                  <th className="p-4">Total Cost</th>
+                  <th className="p-4">Pharmacy Type</th>
+                  <th className="p-4">Delivery Type</th>
+                  <th className="p-4">Placed Date</th>
                   <th className="p-4">Action</th>
                 </tr>
               </thead>
@@ -270,18 +285,17 @@ function Pharmacy() {
                       <div className="text-xs text-gray-400">Employee</div>
                     </td>
                     <td className="p-4">{order.order_id}</td>
-                    <td className="p-4">
-                      {order.items?.[0]?.medicine_id || "No Items"}
-                    </td>
+                    <td className="p-4">{order.pharmacy_type}</td>
                     <td className="p-4">
                       Assigned to Pharmacy
                       <div className="text-xs text-gray-400">
-                        {order.placed_date?.slice(0, 10)}
+                        {order.delivery_type}
                       </div>
                     </td>
                     <td className="p-4 font-bold">
-                      £{parseFloat(order.total_price || 0).toFixed(2)}
+                      {order.placed_date?.slice(0, 10)}
                     </td>
+
                     <td className="p-4">
                       <button
                         onClick={() => fetchOrderDetails(order.order_id)}
@@ -383,13 +397,25 @@ function Pharmacy() {
               </div>
 
               {/* Items */}
-              <h3 className="text-lg font-bold mb-3">Ordered Medicines:</h3>
               <ul className="space-y-2 mb-6 max-h-60 overflow-y-auto pr-2">
                 {selectedOrder.items.map((item) => (
                   <li
                     key={item.item_id}
-                    className="border rounded-md p-3 bg-gray-50"
+                    className="border rounded-md p-3 bg-gray-50 relative"
                   >
+                    {/* Stock Status Badge */}
+                    <div
+                      className={`absolute top-2 right-3 text-xs font-semibold ${
+                        item.stock_status === "In Stock"
+                          ? "text-green-600"
+                          : item.stock_status === "Out of Stock"
+                          ? "text-red-600"
+                          : "text-yellow-600"
+                      }`}
+                    >
+                      {item.stock_status}
+                    </div>
+
                     <div className="font-semibold">
                       {item.medicine_name || "Outdoor Medicine"}
                     </div>
@@ -405,19 +431,40 @@ function Pharmacy() {
               </ul>
 
               {/* Update Button */}
-              <div className="text-center">
+              <div className="text-center mt-6">
                 <button
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold text-lg"
-                  onClick={() => handleUpdateOrder(selectedOrder)}
+                  className={`${
+                    getNextOrderStatus(selectedOrder.order_status).next
+                      ? "bg-blue-600 hover:bg-blue-700"
+                      : "bg-gray-400 cursor-not-allowed"
+                  } text-white px-6 py-2 rounded-lg font-bold text-lg`}
+                  onClick={() =>
+                    getNextOrderStatus(selectedOrder.order_status).next &&
+                    handleUpdateOrder(selectedOrder)
+                  }
+                  disabled={
+                    !getNextOrderStatus(selectedOrder.order_status).next
+                  }
                 >
-                  {selectedOrder.order_status === "completed"
-                    ? "Update Order to Delivered"
-                    : selectedOrder.order_status === "delivered"
-                    ? "Update Order to Ready to Pickup"
-                    : "Update Order Status"}
+                  {getNextOrderStatus(selectedOrder.order_status).label}
                 </button>
               </div>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showPopupMessage && (
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            className={`fixed top-6 right-6 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 z-50 text-white ${
+              popupType === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            <FaCheckCircle className="text-xl" />
+            <span>{popupMessage}</span>
           </motion.div>
         )}
       </AnimatePresence>
