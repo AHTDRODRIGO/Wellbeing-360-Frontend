@@ -27,6 +27,8 @@ import Inventory from "./components/Wellbeing-360/inventry/inventry.js";
 import AddItem from "./components/Wellbeing-360/inventry/addItems.js";
 import ViewItems from "./components/Wellbeing-360/inventry/viewitems.js";
 import Pharmacy from "./components/Wellbeing-360/pharmacy/pharmacy.js";
+import Patiants from "./components/Wellbeing-360/patient-managmement/patientmanagement.js";
+import PatientHistory from "./components/Wellbeing-360/patient-managmement/PatientHistory.jsx";
 
 import Client from "./components/Wellbeing-360/add-doctors/add.jsx";
 import Check_point_by_client from "./components/Wellbeing-360/doctors-managment/add-and-view/check-point-by-client.jsx";
@@ -134,7 +136,13 @@ const AppContent = ({
           <Route path="/inventory-add-items" element={<AddItem />} />
           <Route path="/inventory-view-items" element={<ViewItems />} />
           <Route path="/pharmacy" element={<Pharmacy />} />
+          <Route path="/patiants" element={<Patiants />} />
+          <Route path="/patient-history" element={<PatientHistory />} />
 
+
+
+
+          
           {/* <Route path="/leave-info" element={<Leave />} />
           <Route path="/leave-management" element={<Leave_Management />} />
           <Route path="/leave-request" element={<Leave_Request />} />
