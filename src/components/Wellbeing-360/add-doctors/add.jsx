@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { FaStar, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
+import { AnimatePresence, motion } from "framer-motion";
+import { FaCheckCircle } from "react-icons/fa";
 
 const DoctorManagement = () => {
   const [doctors, setDoctors] = useState([]);
@@ -18,16 +20,17 @@ const DoctorManagement = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [editDoctor, setEditDoctor] = useState(null);
   const [expandedSchedule, setExpandedSchedule] = useState(0); // default open first block
-
+  const [errors, setErrors] = useState({});
+  const [showPopupMessage, setShowPopupMessage] = useState(false);
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupType, setPopupType] = useState("");
   const [formData, setFormData] = useState({
-    doctor_id: "",
     name: "",
     specialization: "",
     contact_number: "",
     email: "",
     work_location: "",
     availability: "",
-    active_status: true,
   });
 
   const API_BASE = "http://localhost:8599/v1/wellbeing360/doctors";
@@ -88,21 +91,50 @@ const DoctorManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const payload = { ...formData };
+    if (!editDoctor) delete payload.doctor_id;
+
     const endpoint = editDoctor
       ? `${API_BASE}/update-doctor?doctor_id=${editDoctor.doctor_id}`
       : `${API_BASE}/add-doctors`;
 
     const method = editDoctor ? "PUT" : "POST";
 
-    const res = await fetch(endpoint, {
-      method,
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const res = await fetch(endpoint, {
+        method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    if (res.ok) {
-      setModalOpen(false);
-      fetchDoctors();
+      const result = await res.json();
+
+      if (res.ok) {
+        setModalOpen(false);
+        setPopupMessage(
+          editDoctor
+            ? `Doctor "${formData.name}" updated successfully!`
+            : `Doctor "${formData.name}" added successfully!`
+        );
+        setPopupType("success");
+        setShowPopupMessage(true);
+        fetchDoctors();
+
+        // Optional: hide after delay
+        setTimeout(() => setShowPopupMessage(false), 3000);
+      } else {
+        setPopupMessage(result.error || "Something went wrong.");
+        setPopupType("error");
+        setShowPopupMessage(true);
+        setTimeout(() => setShowPopupMessage(false), 3000);
+      }
+    } catch (error) {
+      console.error("Submit error:", error);
+      setPopupMessage("Server error. Please try again later.");
+      setPopupType("error");
+      setShowPopupMessage(true);
+      setTimeout(() => setShowPopupMessage(false), 3000);
     }
   };
 
@@ -164,8 +196,6 @@ const DoctorManagement = () => {
     }
   };
   const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState("success"); // "success" or "error"
-  const [popupMessage, setPopupMessage] = useState("");
 
   return (
     <div className="p-6">
@@ -552,12 +582,21 @@ const DoctorManagement = () => {
             <h2 className="text-lg font-bold mb-4">
               {editDoctor ? "Edit Doctor" : "Add Doctor"}
             </h2>
+
             <form onSubmit={handleSubmit} className="space-y-3">
               {Object.entries(formData).map(([key, value]) => {
+                // Skip doctor_id (auto-generated)
+                if (key === "doctor_id") return null;
+
+                // Active Status only in Edit mode
+                if (key === "active_status" && !editDoctor) return null;
+
                 if (key === "active_status") {
                   return (
                     <div key={key}>
-                      <label className="text-sm font-medium">Active</label>
+                      <label className="text-sm font-medium">
+                        Active Status
+                      </label>
                       <select
                         name="active_status"
                         value={value ? "true" : "false"}
@@ -583,6 +622,7 @@ const DoctorManagement = () => {
                     </label>
                     <input
                       type="text"
+                      name={key}
                       value={value}
                       onChange={(e) =>
                         setFormData((prev) => ({
@@ -590,11 +630,13 @@ const DoctorManagement = () => {
                           [key]: e.target.value,
                         }))
                       }
+                      required
                       className="border p-2 rounded w-full"
                     />
                   </div>
                 );
               })}
+
               <div className="flex justify-end gap-3 mt-4">
                 <button
                   type="button"
@@ -614,6 +656,21 @@ const DoctorManagement = () => {
           </div>
         </div>
       )}
+      <AnimatePresence>
+        {showPopupMessage && (
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 100 }}
+            className={`fixed top-6 right-6 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 z-50 text-white ${
+              popupType === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            <FaCheckCircle className="text-xl" />
+            <span>{popupMessage}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

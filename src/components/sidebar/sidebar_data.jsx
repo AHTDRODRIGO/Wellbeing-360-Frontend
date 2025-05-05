@@ -208,6 +208,12 @@ const sidebarData = [
     icon: <MdDashboard />,
     url: "/pharmacy",
   },
+  {
+    _id: "10",
+    name: "patient Management",
+    icon: <MdDashboard />,
+    url: "/patiants",
+  },
 ];
 
 export default sidebarData;
